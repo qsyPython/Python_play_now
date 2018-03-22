@@ -1,5 +1,5 @@
 print("HelloWorld")
-#这一行是注释
+# 这一行是注释
 a = 1
 b = "123"
 c = 1.0
@@ -20,9 +20,9 @@ print(string)
 
 # 像if、while、def和class这样的复合语句，首行以关键字开始，以冒号( : )结束，该行之后的一行或多行代码构成代码组。
 
-counter = 100 # 赋值整型变量
-miles = 1000.0 # 浮点型
-name = "John" # 字符串
+counter = 100  # 赋值整型变量
+miles = 1000.0  # 浮点型
+name = "John"  # 字符串
 
 #  Numbers（数字）
 #  String（字符串）
@@ -32,7 +32,7 @@ name = "John" # 字符串
 
 # 选择位置打印
 print(name[2])
-print(name[0:3]) # range
+print(name[0:3])  # range
 # List（列表） 是 Python 中使用最频繁的数据类型。
 # 列表可以完成大多数集合类的数据结构实现。它支持字符，数字，字符串甚至可以包含列表（所谓嵌套）。
 # 列表用[ ]标识。是python最通用的复合数据类型。看这段代码就明白。
@@ -81,43 +81,43 @@ a = 21
 b = 10
 c = 0
 
-if a == b :
-   print("1 - a 等于 b")
+if a == b:
+    print("1 - a 等于 b")
 else:
-   print("1 - a 不等于 b")
+    print("1 - a 不等于 b")
 
-if  a != b:
-   print("2 - a 不等于 b")
+if a != b:
+    print("2 - a 不等于 b")
 else:
-   print ("2 - a 等于 b")
-if  a < b:
-   print ("4 - a 小于 b")
+    print("2 - a 等于 b")
+if a < b:
+    print("4 - a 小于 b")
 else:
-   print("4 - a 大于等于 b")
+    print("4 - a 大于等于 b")
 
-if a > b :
-   print("5 - a 大于 b")
+if a > b:
+    print("5 - a 大于 b")
 else:
-   print("5 - a 小于等于 b")
+    print("5 - a 小于等于 b")
 
 # 修改变量 a 和 b 的值
 a = 5;
 b = 20;
 if a <= b:
-   print("6 - a 小于等于 b")
+    print("6 - a 小于等于 b")
 else:
-   print("6 - a 大于  b")
+    print("6 - a 大于  b")
 
 if b >= a:
-   print("7 - b 大于等于 a")
+    print("7 - b 大于等于 a")
 else:
-   print("7 - b 小于 a")
+    print("7 - b 小于 a")
 
 # or and not 与 或 非
 # in / not in 在 不在
 name = "12334"
 if name == "444333":
-     print("True")
+    print("True")
 elif name == "2455":
     print("True")
 else:
@@ -129,16 +129,18 @@ if a > 4 and a < 10:
 else:
     print("False2222")
 
-
 i = 0
-while i < 10:print("this is", i);i = i + 1
-else:print("is ok")
+while i < 10:
+    print("this is", i);i = i + 1
+else:
+    print("is ok")
 
 list = [1, 2, 4, "555", 1.0]
 for x in list:
     if x == 2:
         print("2222222")
-    else: print(x)
+    else:
+        print(x)
 
 for x in range(10, 20):
     print(x)
@@ -147,12 +149,13 @@ for x in "3545349xdd":
     if x == "x":
         print("is over")
         break
-    else:print("conutine")
+    else:
+        print("conutine")
 # 迭代是Python最强大的功能之一，是访问集合元素的一种方式。
 # 迭代器是一个可以记住遍历的位置的对象。
 # 迭代器对象从集合的第一个元素开始访问，直到所有的元素被访问完结束。迭代器只能往前不会后退。
 # 迭代器有两个基本的方法：iter() 和 next()。
-list = [1,2,3,4,5,56,733,744,88]
+list = [1, 2, 3, 4, 5, 56, 733, 744, 88]
 it = iter(list)
 print(next(it))
 
@@ -167,6 +170,7 @@ for x in it:
 
 import sys
 
+
 def fibonacci(n):  # 生成器函数 - 斐波那契
     a, b, counter = 0, 1, 0
     while True:
@@ -176,14 +180,17 @@ def fibonacci(n):  # 生成器函数 - 斐波那契
         a, b = b, a + b
         counter += 1
 
+
 # def 函数名（参数列表）:
 #    函数体
 def hello():
     print("hello")
 
-def area(str,width,height):
+
+def area(str, width, height):
     print(str, width * height)
     return width * height
+
 
 # 在 python 中，strings, tuples, 和 numbers 是不可更改的对象，而 list,dict 等则是可以修改的对象。
 # 不可变类型：变量赋值 a=5 后再赋值 a=10，这里实际是新生成一个 int 值对象 10，再让 a 指向它，而 5 被丢弃，不是改变a的值，相当于新生成了a。
@@ -193,14 +200,15 @@ def area(str,width,height):
 # 可变类型：类似 c++ 的引用传递，如 列表，字典。如 fun（la），则是将 la 真正的传过去，修改后fun外部的la也会受影响
 
 def changeList(aList):
-    aList.append([1,2,3,4,5])
-    print("list",aList)
-    print("lsit[0]---->",aList[0])
-    print("alist[1]----->",aList[1])
-    print("alist[2]------>",aList[2])
+    aList.append([1, 2, 3, 4, 5])
+    print("list", aList)
+    print("lsit[0]---->", aList[0])
+    print("alist[1]----->", aList[1])
+    print("alist[2]------>", aList[2])
+
 
 # 不定长参数
-def printinfo( *value):
+def printinfo(*value):
     for val in value:
         print(val)
 
@@ -213,13 +221,15 @@ def printinfo( *value):
 # 虽然lambda函数看起来只能写一行，却不等同于C或C++的内联函数，后者的目的是调用小函数时不占用栈内存从而增加运行效率。
 
 # 实际上意思是arg1 + arg2  前面是传入参数，后面是返回值
-sum = lambda arg1, arg2: arg1+arg2
+sum = lambda arg1, arg2: arg1 + arg2
+
 
 # python map()函数：map()是python内置的高阶函数，
 # 它接收一个函数f和一个list，并且把函数f依次作用在list的每个元素上，
 # 返回一个iterators，可以这样处理list(map())变成list
 def fn(x):
-    return x*x
+    return x * x
+
 
 mylist = map(fn, [1, 2, 3, 4])
 for each in mylist:
@@ -230,17 +240,23 @@ for each in mylist:
 # reduce对list的每个元素反复调用函数f，并返回结果
 
 from functools import reduce
+
+
 def fn(x, y):
-    return x*y
+    return x * y
+
+
 ans = reduce(fn, [1, 2, 3, 4])
 print(ans)
+
 
 # filter函数接收一个函数f和一个list，
 # 函数f的作用是对每个元素进行判断，返回True或者False，
 # filter()根据判断结果自动过滤掉不符合条件的元素，
 # 返回符合要求的元素组成的list
 def deleteNone(s):
-    return s and len(s.strip())>0
+    return s and len(s.strip()) > 0
+
 
 mylist = filter(deleteNone, ['test', None, '', 'str', ' ', 'END'])
 
@@ -250,8 +266,8 @@ for each in mylist:
 if __name__ == '__main__':
     hello()
     area("width * height = ", 2, 3)
-    changeList(["dfdfd","sadffsf"])
-    printinfo(1,2,3,4,5,"sdsds",[3,"dddd",],'ddddffff')
+    changeList(["dfdfd", "sadffsf"])
+    printinfo(1, 2, 3, 4, 5, "sdsds", [3, "dddd", ], 'ddddffff')
     print(sum(1, 2))
-    fn(3,2)
+    fn(3, 2)
     deleteNone(3)
