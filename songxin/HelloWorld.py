@@ -1,13 +1,17 @@
-print("HelloWorld")
+# JetBrains PyCharm 简单的配置使用，git的链接配置，如何更便捷的管理代码
+# .gitgnore的配置
+
 # 这一行是注释
-a = 1
-b = "123"
-c = 1.0
-d = c
-if True:
-    print("True")
-else:
-    print("False")
+print("HelloWorld")
+
+#  Numbers（数字）
+#  String（字符串）
+#  List（列表）
+#  Tuple（元组）
+#  Dictionary（字典）
+counter = 100  # 赋值整型变量
+miles = 1000.0  # 浮点型
+name = "John"  # 字符串
 name = "tom"
 # 在"""中的为原始格式
 string = """
@@ -17,22 +21,11 @@ mmo
          fff
 """
 print(string)
-
-# 像if、while、def和class这样的复合语句，首行以关键字开始，以冒号( : )结束，该行之后的一行或多行代码构成代码组。
-
-counter = 100  # 赋值整型变量
-miles = 1000.0  # 浮点型
-name = "John"  # 字符串
-
-#  Numbers（数字）
-#  String（字符串）
-#  List（列表）
-#  Tuple（元组）
-#  Dictionary（字典）
-
+# 字符 输出可以带颜色
+print("\033[0;31m%s\033[0m" % "输出红色字符")
 # 选择位置打印
 print(name[2])
-print(name[0:3])  # range
+print(name[0:3])  # range 区间
 # List（列表） 是 Python 中使用最频繁的数据类型。
 # 列表可以完成大多数集合类的数据结构实现。它支持字符，数字，字符串甚至可以包含列表（所谓嵌套）。
 # 列表用[ ]标识。是python最通用的复合数据类型。看这段代码就明白。
@@ -77,15 +70,16 @@ print(dict["two"])
 # hex(x)将一个整数转换为一个十六进制字符串
 # oct(x)将一个整数转换为一个八进制字符串
 print(str(dict["two"]))
+
+
+# 像if、while、def和class这样的复合语句，首行以关键字开始，以冒号( : )结束，该行之后的一行或多行代码构成代码组。
 a = 21
 b = 10
 c = 0
-
 if a == b:
     print("1 - a 等于 b")
 else:
     print("1 - a 不等于 b")
-
 if a != b:
     print("2 - a 不等于 b")
 else:
@@ -94,20 +88,14 @@ if a < b:
     print("4 - a 小于 b")
 else:
     print("4 - a 大于等于 b")
-
 if a > b:
     print("5 - a 大于 b")
 else:
     print("5 - a 小于等于 b")
-
-# 修改变量 a 和 b 的值
-a = 5;
-b = 20;
 if a <= b:
     print("6 - a 小于等于 b")
 else:
     print("6 - a 大于  b")
-
 if b >= a:
     print("7 - b 大于等于 a")
 else:
@@ -115,6 +103,17 @@ else:
 
 # or and not 与 或 非
 # in / not in 在 不在
+x = 5
+string =[1,2,3,45,"dfdfdfaaaaa"]
+string2 = [1,"ddd","3dfda",34445]
+if(x in string or x == 4):
+   print(x)
+elif(x not in string):
+    for y in string:
+        print(y)
+else:
+    print(string)
+
 name = "12334"
 if name == "444333":
     print("True")
@@ -166,11 +165,6 @@ for x in it:
 # 跟普通函数不同的是，生成器是一个返回迭代器的函数，只能用于迭代操作，更简单点理解生成器就是一个迭代器。
 # 在调用生成器运行的过程中，每次遇到 yield 时函数会暂停并保存当前所有的运行信息，返回 yield 的值, 并在下一次执行 next() 方法时从当前位置继续运行。
 # 调用一个生成器函数，返回的是一个迭代器对象。
-
-
-import sys
-
-
 def fibonacci(n):  # 生成器函数 - 斐波那契
     a, b, counter = 0, 1, 0
     while True:
@@ -185,7 +179,6 @@ def fibonacci(n):  # 生成器函数 - 斐波那契
 #    函数体
 def hello():
     print("hello")
-
 
 def area(str, width, height):
     print(str, width * height)
@@ -270,4 +263,3 @@ if __name__ == '__main__':
     printinfo(1, 2, 3, 4, 5, "sdsds", [3, "dddd", ], 'ddddffff')
     print(sum(1, 2))
     fn(3, 2)
-    deleteNone(3)
