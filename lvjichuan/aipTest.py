@@ -11,6 +11,7 @@ client = AipSpeech(APP_ID, API_KEY, SECRET_KEY)
 def playMusic():
     pygame.mixer.init()
     print("开始朗读")
+    pygame.time.delay(1000)
     track = pygame.mixer.music.load('auido.mp3')
     pygame.mixer.music.play()
     time.sleep(10)
