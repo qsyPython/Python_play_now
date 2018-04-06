@@ -89,7 +89,6 @@ res2 = pnum2(999)
 print(res1, res2)
 
 #获取装饰器,传参数
-
 def getzsq(char):
     def zsq(func):
         def inner():
