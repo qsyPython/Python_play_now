@@ -180,3 +180,90 @@ l = [{"name": "sz", "age": 18}, {"name": "sz2", "age": 19}, {"name": "sz3", "age
 # result = sorted(l, key=getKey)
 result = sorted(l, key=lambda x: x["age"])
 print(result)
+
+
+print("------------------------闭包-------------------------------")
+#这就是一个简单的闭包
+def test():
+    a = 10
+    def test2():
+        print(a)
+
+    return test2
+
+newFunc = test()
+newFunc()
+
+#闭包案例,动态打印"-"的个数和----中间的文字
+def line_config(content, length):
+    def line():
+        print("-"*(length // 2) + content + "-"*(length // 2)) #   //是整除运算符
+    return line
+
+line1 =  line_config("闭包", 40)
+line1()
+line1()
+line1()
+line1()
+
+line2 = line_config("xxxx", 80)
+line2()
+line2()
+line2()
+
+#闭包的注意事项,如果用到外边的变量 需要加nonlocal
+def test():
+    num = 10
+    def test2():
+        nonlocal num
+        num = 666
+        # print(a)
+        print(num)
+
+    print(num)
+    test2()
+    print(num)
+
+    return test2
+
+result = test()
+
+result()
+
+#闭包的注意事项2:
+def test():
+    funcs = []
+    for i in range(1, 4):
+        def test2():
+            print(i)
+        funcs.append(test2)
+    return funcs
+
+newFuncs = test()
+
+print(newFuncs)
+
+newFuncs[0]()#3
+newFuncs[1]()#3
+newFuncs[2]()#3
+
+#如果上述例子想打印1 2 3 则需要这样改造
+
+def test():
+    funcs = []
+    for i in range(1, 4):
+        def test2(num):
+            def inner():
+                print(num)
+            return inner
+        funcs.append(test2(i))
+    return funcs
+
+newFuncs = test()
+
+print(newFuncs)
+
+newFuncs[0]()
+newFuncs[1]()
+newFuncs[2]()
+
