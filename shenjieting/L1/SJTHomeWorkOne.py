@@ -52,19 +52,23 @@ def DoubleBallControl():
     print(inputList[:7],'*',inputList[7])
 
 def DoubleBallRandom(notenum,multiple):
+
     countRed = 6 #红球总数
     tempInt= 0  #临时数
     resultList = [] #存放的数组
-    while(len(resultList)<countRed):
-        tempInt = random.randint(1, 33)
-        if(tempInt not in resultList):#判断随机数是否存在于这个数组
-            resultList.append(tempInt)
 
-    tempInt =random.randint(1, 16)
-    resultList.append(tempInt) #随机添加一个篮球
-    print('结果',resultList,'*',multiple)
+    for i in range(int(notenum)):
+        del resultList[:] #清空数组所有数值
+        while(len(resultList)<countRed):
+            tempInt = random.randint(1, 33)
+            if(tempInt not in resultList):#判断随机数是否存在于这个数组
+                resultList.append(tempInt)
 
-print('请输入双色球随机生成的注数和倍数')
+        tempInt =random.randint(1, 16)
+        resultList.append(tempInt) #随机添加一个篮球
+        print('结果',resultList,'*',multiple,'\n')
+
+print('~请输入双色球随机生成的注数和倍数~')
 print('请输入注数：')
 while True:
     noteNumber = input()
@@ -83,6 +87,6 @@ while True:
 
 DoubleBallRandom(noteNumber,multiple)
 
-print('\n\n\n')
+print('\n\n')
 #自主输入
 DoubleBallControl()
