@@ -1,7 +1,7 @@
 # JetBrains PyCharm 简单的配置使用，git的链接配置，如何更便捷的管理代码
 # .gitgnore的配置
 
-# 这一行是注释
+# 这一行是注释 //
 print("HelloWorld")
 
 #  Numbers（数字）
@@ -17,7 +17,7 @@ name = "tom"
 string = """
 mmo
    mmm
-      ddd
+      ddd     dfffd
          fff
 """
 print(string)
@@ -30,7 +30,7 @@ print(name[0:3])  # range 区间
 # 列表可以完成大多数集合类的数据结构实现。它支持字符，数字，字符串甚至可以包含列表（所谓嵌套）。
 # 列表用[ ]标识。是python最通用的复合数据类型。看这段代码就明白。
 # 列表中的值得分割也可以用到变量[头下标:尾下标]，就可以截取相应的列表，从左到右索引默认0开始的，从右到左索引默认-1开始，下标可以为空表示取到头或尾。
-list = [1, 2, 4, "555", 1.0]
+list = [1, 2, 4, "555", 1.0, ["ssddd"]]
 listB = ["45566", "3333"]
 print(list[0])
 print(list[1:4])
@@ -154,7 +154,7 @@ for x in "3545349xdd":
 # 迭代器是一个可以记住遍历的位置的对象。
 # 迭代器对象从集合的第一个元素开始访问，直到所有的元素被访问完结束。迭代器只能往前不会后退。
 # 迭代器有两个基本的方法：iter() 和 next()。
-list = [1, 2, 3, 4, 5, 56, 733, 744, 88]
+list = [1, 2, 3, 4, 5, 56, 733, 744, 88,"sss",'ddd']
 it = iter(list)
 print(next(it))
 
@@ -214,9 +214,10 @@ def printinfo(*value):
 # 虽然lambda函数看起来只能写一行，却不等同于C或C++的内联函数，后者的目的是调用小函数时不占用栈内存从而增加运行效率。
 
 # 实际上意思是arg1 + arg2  前面是传入参数，后面是返回值
-sum = lambda arg1, arg2: arg1 + arg2
+sum = lambda arg1, arg2: (arg1 + arg2) * arg1
 
-
+def sum(arg1,arg2):
+    return arg1 + arg2
 # python map()函数：map()是python内置的高阶函数，
 # 它接收一个函数f和一个list，并且把函数f依次作用在list的每个元素上，
 # 返回一个iterators，可以这样处理list(map())变成list
@@ -236,11 +237,11 @@ from functools import reduce
 
 
 def fn(x, y):
-    return x * y
+    return x + y
 
 
 ans = reduce(fn, [1, 2, 3, 4])
-print(ans)
+print("songxin",ans)
 
 
 # filter函数接收一个函数f和一个list，
@@ -263,3 +264,7 @@ if __name__ == '__main__':
     printinfo(1, 2, 3, 4, 5, "sdsds", [3, "dddd", ], 'ddddffff')
     print(sum(1, 2))
     fn(3, 2)
+
+mlist = map(lambda x: x, [1,2,3])
+for x in mlist:
+    print(x)
