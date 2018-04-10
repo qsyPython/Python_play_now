@@ -15,34 +15,54 @@ import platform
 from Testlib import *
 from MJlib import *
 
-print("······欢迎使用简易记事本······")
-# sys.setdefaultencoding('utf8')
-print("当前系统编码：",sys.getdefaultencoding())
-print(sys.argv[0])
-# print(sys.argv[1]) 从外部获取参数
-
-print("检查操作系统信息······",platform.uname())
-print("检查当前python版本······",platform.python_version())
-
-# os.F_OK: 作为access()的mode参数，测试path是否存在。
-# os.R_OK: 包含在access()的mode参数中 ， 测试path是否可读。
-# os.W_OK 包含在access()的mode参数中 ， 测试path是否可写。
-# os.X_OK 包含在access()的mode参数中 ，测试path是否可执行。
-
-ret = os.access("homework.txt", os.F_OK)
-print("检查文件path是否存在······",ret)
-
-str=input("请输入想要保存的文字······")
-
-note=Testlib('Testlib')
-note.say(str)
-
-inote=TestlibB('TestlibB')
+# 主要方法
+def myNote():
+    print("······欢迎使用简易记事本······")
+    # sys.setdefaultencoding('utf8')
+    print("当前系统编码：",sys.getdefaultencoding())
 
 
-# 采用枚举类
-color=MJlib.blue.value
-print("温馨提示：今天你的幸运颜色数字：",color)
+    print("检查操作系统信息······",platform.uname())
+    print("检查当前python版本······",platform.python_version())
+
+    # os.F_OK: 作为access()的mode参数，测试path是否存在。
+    # os.R_OK: 包含在access()的mode参数中 ， 测试path是否可读。
+    # os.W_OK 包含在access()的mode参数中 ， 测试path是否可写。
+    # os.X_OK 包含在access()的mode参数中 ，测试path是否可执行。
+
+    ret = os.access("homework.txt", os.F_OK)
+    print("检查文件path是否存在······",ret)
+
+    str=input("请输入想要保存的文字······")
+
+    note=Testlib('Testlib')
+    note.say(str)
+
+    inote=TestlibB('TestlibB')
+
+
+    # 采用枚举类
+    color=MJlib.blue.value
+    print("温馨提示：今天你的幸运颜色数字：",color)
+
+
+# 检查外部输入参数
+def checkArg(str):
+    if len(str)<2:
+        # raise 触发异常
+        raise Exception("没有传入参数（可忽略）!")
+
+# 程序的开始
+try:
+    print(sys.argv[0])
+    checkArg(sys.argv)
+except Exception as e:# 与2.7不同
+    print(e)
+else:
+    print("没有异常的")
+finally:
+    myNote()
+
 
 # 元类
 # 元类的主要使用场景是创建一个API。99%的场景，其实并不需要元类。
@@ -58,3 +78,5 @@ appEnd = type('appEnd', (object,), dict(say_bye=fn))  # 创建 appEnd class
 hello = appEnd()
 # 使用hello调用方法say_hello
 hello.say_bye()
+
+
