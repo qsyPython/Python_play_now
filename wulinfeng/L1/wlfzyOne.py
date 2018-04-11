@@ -89,7 +89,7 @@ def wlfRxNumber():
         strArr = []
         for i in range(7):
             if i == 6:
-                strArr.append(wlfsetNumBySelf(1,17,t,i,strArr))
+                strArr.append(wlfsetNumBySelf(1,17,t,i,[]))
             else:
                 strArr.append(wlfsetNumBySelf(1,34,t,i,strArr))
         print("人选", (t + 1), "注号码为：----\t", strArr, y, "倍")

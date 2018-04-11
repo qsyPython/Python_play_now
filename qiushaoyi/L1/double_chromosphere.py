@@ -80,7 +80,7 @@ def main():
                print('请输入正确信息:\n',e)
                continue
            except IndexError as e:
-               print('输入信息过少:\n',e)
+               print('输入有效信息过少:\n',e)
                continue
            except:
                print('程序异常!\n')
@@ -106,7 +106,7 @@ def main():
                print('请输入正确信息:\n',e)
                continue
            except IndexError as e:
-               print('输入信息过少:\n',e)
+               print('输入有效信息过少:\n',e)
                continue
            except:
                print('程序异常!\n')
