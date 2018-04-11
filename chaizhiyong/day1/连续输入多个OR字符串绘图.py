@@ -15,3 +15,4 @@ turtle.pendown()
 turtle.goto(x2,y2)
 turtle.write("(" +str(x2) + "," + str(y2) + ")")
 turtle.done()
+
