@@ -3,7 +3,7 @@
 # 类和实例（创建、使用、面向对象的特性详解、枚举类；多重继承和元类）
 # 异常处理和代码测试（python的异常处理，函数和类的测试）；
 
-
+# 一个模块只会被导入一次，不管你执行了多少次import。这样可以防止导入模块被一遍又一遍地执行。
 import os
 import sys
 # os 提供了一种方便的使用操作系统函数的方法，负责程序与操作系统的交互，提供了访问操作系统底层的接口。例如对于文件的操作
@@ -12,6 +12,7 @@ import sys
 import platform
 # 获取操作系统信息
 
+# from lib import fun 这个声明不会把整个 lib 模块导入到当前的命名空间中，它只会将 lib 里的 fun 单个引入到执行这个声明的模块的全局符号表。
 from Testlib import *
 from MJlib import *
 
