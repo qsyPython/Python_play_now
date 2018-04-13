@@ -5,9 +5,9 @@ from colorSimplePattern import Colored
 目标：在控制台打印符合要求的数字，输出7个数字即可，不需要带颜色
 具体细节：1.红球区6个，闭区间1-33,蓝色球1个，闭区间1-16，一共7个
           2.需要满足条件：①能够随机输出7个在区间内的数字，6个红球1个蓝球，6个红球不能重复，蓝球可以和前面有重复
-          例如：在控制台上输出结果：[1,3,5,17,26,33 5]
+          例如：在控制台上输出结果：[1,3,5,17,26,33][5]
           ②能够随机N注N倍，例如随机1注5倍，2注每注5倍 
-          例如：在控制台输出结果：[1,3,5,17,26,33 5]*3
+          例如：在控制台输出结果：[1,3,5,17,26,33] [5]*3
           [1,5,8,15,20,26  9]*5
           ③能够手动输入6个红球，1个蓝球，并且可以乘以倍数
           例如：[1,5,8,15,20,26  9]*5
@@ -98,7 +98,7 @@ def buy_lottery():
                  print('请输入正确信息:\n', e)
                  continue
            except IndexError as e:
-                 print('输入信息过少:\n', e)
+                 print('请输入正确信息:\n', e)
                  continue
            except:
                  print('程序异常!\n')
@@ -114,7 +114,7 @@ def buy_lottery():
         is_blue_success = False
         manual_blue_ball = ""
         while is_blue_success == False:
-            manual_blue_ball = input('请输入区间1-36中1个蓝球,(如3):')
+            manual_blue_ball = input('请输入区间1-16中1个蓝球,(如3):')
             is_blue_success = manual_select_blue_ball_number(manual_blue_ball)
 
         is_integer = False
@@ -137,12 +137,13 @@ def main():
     while is_success == True:
        buy_Y_or_N = input("你如果购买彩票请输入Y否则输入N：")
        if buy_Y_or_N == "Y":
-           buy_lottery();
+           buy_lottery()
        elif buy_Y_or_N == "N":
+           is_success = False
            print("game over")
        else:
-           is_success = False
+           is_success = True
 
 #主程序入口
 
-main();
+main()
