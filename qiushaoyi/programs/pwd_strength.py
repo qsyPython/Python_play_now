@@ -3,7 +3,7 @@
     功能：根据设定的规则来判断密码强度,包括：文件写入和读取、工具类以及设定密码强度等级
     日期：2018/04/14
 """
-import os,platform,socket
+import platform,socket
 
 class PasswordTool:
     """
@@ -86,8 +86,10 @@ def main():
         password_tool = PasswordTool(password)
         password_tool.process_password()
 
+        os_info = platform.platform()
         hostname=socket.gethostname()
         ip = socket.gethostbyname(hostname)
+
         line = '操作人pc：{}, 操作人ip：{}, 密码：{}, 强度：{}\n'.format(hostname,ip,password, password_tool.strength_level)
         file_tool.write_to_file(line)
 
