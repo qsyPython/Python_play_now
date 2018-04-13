@@ -1,5 +1,5 @@
 import random
-
+#######ß
 while True:
     isRand = input("手选还是机选(s/r):")
     if isRand == 's' or isRand == 'r':
