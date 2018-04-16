@@ -78,7 +78,7 @@ def main():
         主函数
     """
     try_times = 5
-    filepath = 'password_6.0.txt'
+    filepath = 'password.txt'
     file_tool = FileTool(filepath)
 
     while try_times > 0:
