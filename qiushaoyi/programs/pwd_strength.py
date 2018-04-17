@@ -6,6 +6,7 @@
 import platform,socket
 
 class PasswordTool:
+
     """
         密码工具类
     """
