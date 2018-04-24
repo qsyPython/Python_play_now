@@ -32,3 +32,6 @@ class saveLogInfoTool():
                 log_info.writeInfo()
                 break
 
+if __name__ == '__main__':
+    s = saveLogInfoTool()
+    s.main()
