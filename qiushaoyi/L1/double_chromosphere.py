@@ -31,6 +31,7 @@ def random_choose_number():
     random_list_oneMultiple = []
     for red_ball in random_red_ball:
         random_list_oneMultiple.append(red_ball)
+    random_list_oneMultiple.sort()
     random_list_oneMultiple.append(random_blue_ball)
     return random_list_oneMultiple
 
@@ -52,6 +53,7 @@ def manual_choose_number(blue_number,*red_number):
     for i in red_number:
         if i>0 and i<34:
             manual_list_oneMultiple.append(i)
+    manual_list_oneMultiple.sort()
     if blue_number>0 and blue_number <17:
         manual_list_oneMultiple.append(blue_number)
     return manual_list_oneMultiple
