@@ -125,3 +125,5 @@ DerivedData
 *.xcuserstate
 *.xcscmblueprint
 
+lvjichuan/MNIST_data/
+lvjichuan/aip/

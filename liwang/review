@@ -1,0 +1,67 @@
+#!usr/bin/python3
+#-*-coding:utf-8-*-
+
+import os
+# import sys
+
+# directory = "./dir"
+# os.chdir(directory)
+# cwd = os.getcwd()
+# print('--------------- current working directory ------------------')
+
+# print(dir([ ]))
+
+
+def deleteBysize(minsize):
+    files = os.listdir(os.getcwd())
+    for file in files:
+        if os.path.getsize(file) < minsize *1000:
+            os.remove(file)
+            print(file + "deleted")
+    return
+
+def deleteNullFile():
+    files = os.listdir(os.getcwd())
+    for file in files:
+        if os.path.getsize(file) == 0:
+            os.remove(file)
+            print(file + "deleted.")
+    return
+
+
+
+def create():
+    import time
+    t = time.strftime('%Y-%m-%d',time.localtime())
+    suffix = '.docx'
+    newfile = t + suffix
+    if not os.path.exists(newfile):
+        f = open(newfile,'w')
+        print(newfile)
+        f.close()
+        print(newfile + 'created.')
+    else:
+        print(newfile + 'already existed.')
+    return
+create()
+
+hint = '''funtion:
+            1   create new file
+            2   delete null file
+            3   delete by size
+please input number:'''
+import operator
+while True:
+    option =input(hint)
+    if operator.eq(option,"1") == 0:
+        create()
+    elif operator.eq(option,"2") == 0:
+        deleteNullFile()
+    elif operator.eq(option,"3") == 0:
+        minSize = input("minsize(k):")
+        deleteBysize(minSize)
+    elif operator.eq(option,'q') == 0:
+        print("quit!")
+        break
+    else:
+        print("disabled input, please try again....")
