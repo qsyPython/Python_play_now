@@ -10,8 +10,7 @@ Python的第2期作业：
 1.记录用户的账号  登录时间  登录的使用的系统
 """
 
-from saveLogInfoTool import *
+import SaveUserInfo
 
 if __name__ == '__main__':
-    log_info = saveLogInfoTool()
-    log_info.main()
+    SaveUserInfo.SaveLogInfoTool.main()
