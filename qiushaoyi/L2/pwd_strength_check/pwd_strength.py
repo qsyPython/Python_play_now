@@ -65,8 +65,9 @@ def main():
         主函数
     """
     try_times = 5
-    filepath = 'L2/pwd_strength_check/password.txt'
 
+    module_path = path.dirname(__file__)#获取当前文件的绝对路径：包括包
+    filepath = module_path + '/password.txt'#拼接文件
     file_tool = FileTool(filepath)
 
     while try_times > 0:
