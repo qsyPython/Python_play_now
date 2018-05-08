@@ -1,0 +1,194 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+    <meta charset="utf-8" />
+    <meta content="initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width" name="viewport" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta content="telephone=no" name="format-detection" />
+    <meta name="keywords" content="首页" />
+    <meta name="description" content="医药" />
+    <link rel="stylesheet" href="../../Desktop/七乐康医生/trunk/CloudsOutpatient/CloudsOutpatient/CloudsOutpatient/Resources/Crow5/crow5/assets/css/layer.min.css?v=20160316">
+    <link rel="stylesheet" href="../../Desktop/七乐康医生/trunk/CloudsOutpatient/CloudsOutpatient/CloudsOutpatient/Resources/Crow5/crow5/assets/css/reset.min.css?v=20160614">
+    <link rel="stylesheet" href="../../Desktop/七乐康医生/trunk/CloudsOutpatient/CloudsOutpatient/CloudsOutpatient/Resources/Crow5/crow5/assets/css/base-page.min.css?v=20160316">
+    <link rel="stylesheet" href="../assets/css/video-bespeak-time.css?v=20160316">
+    <title>服务时间</title>
+</head>
+<body id="allpage" data-role="page">
+<!--加载动画-->
+<div id="loading" class="layermbox layermbox2 hide" index="0">
+    <div class="laymshade"></div>
+    <div class="layermmain">
+        <div class="section">
+            <div class="layermchild  layermanim">
+                <div class="layermcont"><i></i><i class="laymloadtwo"></i><i></i>
+                    <div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/html" id="time_tpl">
+    <section id="time_tpl_node"  style="display: none" data-bind="attr: {'style': ''}">
+
+
+        <!--<ul id="week_box">-->
+        <!--<li class="week">-->
+        <!--<header>-->
+        <!--<ul class="week_index">-->
+        <!--<li class="month" data-bind="text:monthIndex[$data.month-1]"></li>-->
+        <!--<li data-bind="attr: $data.time[0].date === thisTime ? {class: 'today'} : {}">-->
+        <!--<p class="weekSeveral">一</p>-->
+        <!--<p class="sun" data-bind="text: sun($data.time[0].date)"></p>-->
+        <!--</li>-->
+        <!--<li data-bind="attr: $data.time[1].date === thisTime ? {class: 'today'} : {}">-->
+        <!--<p class="weekSeveral">二</p>-->
+        <!--<p class="sun" data-bind="text: sun($data.time[1].date)"></p>-->
+        <!--</li>-->
+        <!--<li data-bind="attr: $data.time[2].date === thisTime ? {class: 'today'} : {}">-->
+        <!--<p class="weekSeveral">三</p>-->
+        <!--<p class="sun" data-bind="text: sun($data.time[2].date)"></p>-->
+        <!--</li>-->
+        <!--<li data-bind="attr: $data.time[3].date === thisTime ? {class: 'today'} : {}">-->
+        <!--<p class="weekSeveral">四</p>-->
+        <!--<p class="sun" data-bind="text: sun($data.time[3].date)"></p>-->
+        <!--</li>-->
+        <!--<li data-bind="attr: $data.time[4].date === thisTime ? {class: 'today'} : {}">-->
+        <!--<p class="weekSeveral">五</p>-->
+        <!--<p class="sun" data-bind="text: sun($data.time[4].date)"></p>-->
+        <!--</li>-->
+        <!--<li class="red" data-bind="attr: $data.time[5].date === thisTime ? {id: 'red today'} : {}">-->
+        <!--<p class="weekSeveral">六</p>-->
+        <!--<p class="sun" data-bind="text: sun($data.time[5].date)"></p>-->
+        <!--</li>-->
+        <!--<li class="red" data-bind="attr: $data.time[6].date === thisTime ? {id: 'red today'} : {}">-->
+        <!--<p class="weekSeveral">日</p>-->
+        <!--<p class="sun" data-bind="text: sun($data.time[6].date)"></p>-->
+        <!--</li>-->
+        <!--</ul>-->
+        <!--</header>-->
+        <!--<div class="time_box">-->
+        <!--<ul>-->
+        <!--<li class="sun_time_box_index">-->
+        <!--<p class="sun_time"><span>08:00</span></p>-->
+        <!--<p class="sun_time"><span>09:00</span></p>-->
+        <!--<p class="sun_time"><span>10:00</span></p>-->
+        <!--<p class="sun_time"><span>11:00</span></p>-->
+        <!--<p class="sun_time"><span>12:00</span></p>-->
+        <!--<p class="sun_time"><span>13:00</span></p>-->
+        <!--<p class="sun_time"><span>14:00</span></p>-->
+        <!--<p class="sun_time"><span>15:00</span></p>-->
+        <!--<p class="sun_time"><span>16:00</span></p>-->
+        <!--<p class="sun_time"><span>17:00</span></p>-->
+        <!--<p class="sun_time"><span>18:00</span></p>-->
+        <!--<p class="sun_time"><span>19:00</span></p>-->
+        <!--<p class="sun_time"><span>20:00</span></p>-->
+        <!--<p class="sun_time"><span>21:00</span></p>-->
+        <!--<p class="sun_time"><span>22:00</span></p>-->
+        <!--</li>-->
+        <!--&lt;!&ndash;ko foreach: $data.time&ndash;&gt;-->
+        <!--<li class="sun_time_box" data-bind="attr: $data.date === thisTime ? {class: 'today sun_time_box',date: $data.date} : {date: $data.date}">-->
+        <!--&lt;!&ndash;ko foreach: $data.timeSettings&ndash;&gt;-->
+        <!--<p data-bind="attr: {time: time($data.timepoint), timeTo: $data.timepoint, class: selects($data.selected, $data.operationType, $data.timepoint), classTo: selects($data.selected, $data.operationType, $data.timepoint), selected: $data.selected, operationType: $data.operationType, selectedTo: $data.selected, operationTypeTo: $data.operationType}"></p>-->
+        <!--&lt;!&ndash;/ko&ndash;&gt;-->
+        <!--</li>-->
+        <!--&lt;!&ndash;/ko&ndash;&gt;-->
+        <!--</ul>-->
+        <!--</div>-->
+        <!--</li>-->
+        <!--</ul>-->
+
+
+        <div id="month"></div>
+        <div id="box">
+            <div id="time_box">
+                <div id="hour">
+                    <p>8:00</p>
+                    <p>9:00</p>
+                    <p>10:00</p>
+                    <p>11:00</p>
+                    <p>12:00</p>
+                    <p>13:00</p>
+                    <p>14:00</p>
+                    <p>15:00</p>
+                    <p>16:00</p>
+                    <p>17:00</p>
+                    <p>18:00</p>
+                    <p>19:00</p>
+                    <p>20:00</p>
+                    <p>21:00</p>
+                    <p>22:00</p>
+                </div>
+                <div id="week_box">
+                    <div id="week_scroll" data-bind="foreach: weeks(session().data[0].weekTimeSettings)">
+                        <div class="week" data-bind="foreach: $data.time">
+                            <div class="sun">
+                                <div>
+                                    <p data-bind="text: hour($data.week)"></p>
+                                    <p></p>
+                                </div>
+                                <ul>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="float">
+            <div class="box_table">
+                <div class="box_cell">
+                    <div class="box">
+                        <p class="title">好用的时间选项 来体验一下</p>
+                        <p class="main"><img src="../../Desktop/七乐康医生/trunk/CloudsOutpatient/CloudsOutpatient/CloudsOutpatient/Resources/Crow5/crow5/assets/image/time_alert.png" /></p>
+                        <button>知道了</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="save">
+            <div class="box_table">
+                <div class="box_cell">
+                    <div class="box">
+                        <p class="title">是否保存修改过的预约时间?</p>
+                        <p><button>保存</button><button>取消</button></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</script>
+<script src="../../Desktop/七乐康医生/trunk/CloudsOutpatient/CloudsOutpatient/CloudsOutpatient/Resources/Crow5/crow5/assets/js/util/require.min.js" data-main="../assets/js/main/video-bespeak-time.js"></script>
+</body></html>

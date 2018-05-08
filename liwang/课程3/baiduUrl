@@ -1,0 +1,59 @@
+"""
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+import urllib.request
+import urllib.parse
+
+url='http://www.baidu.com/s?wd='
+key='fengxin的博客'
+key_code=urllib.request.quote(key)
+#因为URL里含中文，需要进行编码
+
+url_all=url+key_code
+header={
+    'User-Agent':'Mozilla/5.0 (X11; Fedora; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36'
+}   #头部信息
+request=urllib.request.Request(url_all,headers=header)
+reponse=urllib.request.urlopen(request).read()
+
+fh=open("./baidu.html","wb")    #写入文件中
+fh.write(reponse)
+fh.close()
+
+"""
+
+
+
+"""
+# 此时，我们用浏览器打开刚才保存的baidu.html文件，我们就可以看到我们刚才爬取的网页结果
+
+通过以上实例我们可以知道，如果要使用GET请求，思路如下：
+构建对应的URL地址，该URL地址包含GET请求的字段名和字段内容等信息，并且URL地址满足GET请求的格式，即“http://网址?字段名1=字段内容1&字段名2=字段内容2”
+以对应的URL为参数，构建Request对象。
+通过urlopen()打开构建的Request对象。
+按需求进行后续的处理操作，比如读取网页的内容、将内容写入文件等。
+
+"""
+
+# """
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+import urllib.request
+import urllib.parse
+
+url='http://www.iqianyue.com/mypost'
+header={
+   'User-Agent':'Mozilla/5.0 (X11; Fedora; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36'
+}
+
+data={'name':'fengxin','pass':'123'}
+postdata=urllib.parse.urlencode(data).encode('utf8') #进行编码
+request=urllib.request.Request(url,postdata)
+reponse=urllib.request.urlopen(request).read()
+
+fhandle=open("./1.html","wb")
+fhandle.write(reponse)
+fhandle.close()
+# """
