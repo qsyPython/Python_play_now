@@ -1,3 +1,4 @@
+# encoding: utf-8
 from Python_play_now.yanhao.L2.method import Date
 class User:
     def __init__(self, birthday):

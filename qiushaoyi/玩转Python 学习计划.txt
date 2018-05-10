@@ -1,4 +1,3 @@
-组名：7LK_玩转Python
 Python学习计划（半年计划）
 
 
