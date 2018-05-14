@@ -6,11 +6,32 @@
 
 import urllib3
 from pyquery import PyQuery as pq
+import matplotlib.pyplot as plt
+import numpy as np
 
+# http = urllib3.PoolManager()
+# r = http.request('GET', 'http://pm25.in/')
+# print(r.data)
 
-http = urllib3.PoolManager()
-r = http.request('GET', 'http://pm25.in/')
-print(r.data)
+d=pq(url="http://pm25.in/rank")
+p=d('.table').find("tbody")
+list=[]
+list2=[]
+for i in range(50):
+    v=p.find("tr").eq(i)
+    list.append(v.find("td").eq(1).text())
+    list2.append(int(v.find("td").eq(2).text()))
+print("打印完成")
 
-d=pq(url="http://pm25.in/")
-print(d('title').text())
+plt.rcParams['font.sans-serif']=['SimHei'] #用来正常显示中文标签
+plt.rcParams['axes.unicode_minus']=False #用来正常显示负号
+
+N = 50
+x = np.arange(N)
+data = list2
+colors = np.random.rand(N * 3).reshape(N, -1)
+labels = list
+
+plt.title(u"全国空气质量排名")
+plt.bar(x, data, alpha=0.8, color=colors, tick_label=labels)
+plt.show()
