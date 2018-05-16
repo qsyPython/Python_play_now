@@ -11,6 +11,7 @@ import os
 flag = False
 analyze_data = 50
 cityAQI_name= "/Users/Ne/Python_play_now/wangfuhao/L03/resource/cityAQI_name.csv"
+top50_name = "/Users/Ne/Python_play_now/wangfuhao/L03/resource/top50_name.csv"
 
 class Spider:
     def __init__(self):
@@ -85,11 +86,12 @@ class Spider:
             writer_tool.writerow(item)
             print("写入完成")
 
-    def draw_picture(self,file_name):
-        pandas_data = pd.read_csv(file_name)
+    def draw_picture(self,total_file_name,top50_file_name):
+        pandas_data = pd.read_csv(total_file_name)
         sort_data = pandas_data.sort_values(by='AQI')
         filter_data = sort_data[sort_data["AQI"] > 0]
         filter_data = filter_data.head(analyze_data)
+        filter_data.to_csv(top50_file_name,index=False)
 
         x = np.arange(analyze_data)
         colors = np.random.rand(analyze_data * 3).reshape((analyze_data,3))
@@ -113,5 +115,5 @@ if __name__ == '__main__':
     s = Spider()
     s.checkfile(cityAQI_name)
     s.startLoadData()
-    s.draw_picture(cityAQI_name)
+    s.draw_picture(cityAQI_name,top50_name)
 
