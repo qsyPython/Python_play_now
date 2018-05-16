@@ -1,5 +1,6 @@
 Python版本 3.6.0
-1. 添加SimHei字体（simhei.ttf文件）到python3.6的packages中 /Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/matplotlib/mpl-data/fonts/ttf/ （pycharm配置的环境）中；下载地址：黑体字体simhei.ttf（http://www.font5.com.cn/font_download.php?id=151&part=1237887120）
+1. 添加SimHei字体（simhei.ttf文件）到python3.6的packages中 /Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/matplotlib/mpl-data/fonts/ttf/ （pycharm配置的环境）中；
+下载地址：黑体字体simhei.ttf（http://www.font5.com.cn/font_download.php?id=151&part=1237887120）
 2. 删除~/.matplotlib/下的所有缓存文件 rm -rf ~/.matplotlib/*.* (注意rm -rf命令，确认路径没错在用)
 3. 设置matplotlib使用的字体资源
  在你要画图的的python文件中，添加 
