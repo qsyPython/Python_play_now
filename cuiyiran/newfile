@@ -1,1 +1,29 @@
+一、概念及功能：
+1、缩进：从属关系
+2、冒号：循环标识
+
+二、方法：
+1、输出：print()
+2、驼峰：title()
+3、知识类型：str()
+4、list拼接：append()、insert()、del、pop()、remove()
+5、list排序：sort()、sort(reverse=True)、sorted()、reverse()、len()
+6、范围：range()、
+7、转换成列表：list()、
+8、min()、max()、sun()
+
+#列表解析 for循环
+squares = [value**2 for value in range(1,11)]
+print(squares)
+
+三、pycharm链接github
+遇到问题：
+1、git要求最新版本
+2、问题：git error setting certificate verify locations
+解决方法：git config --global http.sslVerify false
+
+
+2018/3/29
+笔记：
+1、list()中可以
 
