@@ -83,8 +83,8 @@
 # DataFrame
 # DataFrame 是一种二维的数据结构，非常接近于电子表格或者类似 mysql 数据库的形式。它的竖行称之为 columns，横行跟前面的 Series 一样，称之为 index，也就是说可以通过 columns 和 index 来确定一个主句的位置。
 
-from pandas import Series,DataFrame
-
+# from pandas import Series,DataFrame
+#
 # data = {"name":['google','baidu','yahoo'],"marks":[100,200,300],"price":[1,2,3]}
 #
 # f1 = DataFrame(data)

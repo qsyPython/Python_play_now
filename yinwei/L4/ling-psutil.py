@@ -16,6 +16,7 @@ import psutil
 #print(psutil.disk_partitions())#[sdiskpart(device='/dev/disk1', mountpoint='/', fstype='hfs', opts='rw,local,rootfs,dovolfs,journaled,multilabel')]
 
 #返回当前登录系统的用户信息
-print(psutil.users())#suser(name='yinwei', terminal='console', host=None, started=1526260224.0, pid=100), suser(name='yinwei', terminal='ttys000', host=None, started=1526268416.0, pid=785), suser(name='yinwei', terminal='ttys002', host=None, started=1526278912.0, pid=2704)]
+print(psutil.users())
+#suser(name='yinwei', terminal='console', host=None, started=1526260224.0, pid=100), suser(name='yinwei', terminal='ttys000', host=None, started=1526268416.0, pid=785), suser(name='yinwei', terminal='ttys002', host=None, started=1526278912.0, pid=2704)]
 
 

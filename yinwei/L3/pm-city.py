@@ -1,8 +1,7 @@
 #先爬取所有城市以及对应城市的空气质量指标，然后做一个top50的图表
-#http://pm25.in/
+#http://pm25.in/rank
 
 import  requests
-import re
 from bs4 import BeautifulSoup
 import matplotlib.pyplot as plt
 import numpy as np
@@ -14,7 +13,7 @@ r = requests.get('http://pm25.in/rank')
 soup = BeautifulSoup(r.text, 'html.parser')
 
 city = soup.select('.table-striped a')
-#获取城市姓名
+#获取城市姓名======
 trList = soup.select('.table-striped tbody tr ')
 #获取tr列表
 
@@ -31,7 +30,6 @@ while(index<50):
     cityNameList.append(city[index].text)
     index = index+1
 
-print(tdList)
 
 N = 7
 x = np.arange(50)

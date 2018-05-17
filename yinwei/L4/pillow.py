@@ -16,7 +16,7 @@ from PIL import Image, ImageDraw, ImageFont, ImageFilter
 #图片模糊
 # from PIL import ImageFilter
 # im = Image.open('img/bird.jpg')
-# # 应用模糊滤镜:
+# # # 应用模糊滤镜:
 # im2 = im.filter(ImageFilter.BLUR)
 # im2.save('img/blur.jpg', 'jpeg')
 
@@ -55,8 +55,8 @@ from PIL import Image, ImageDraw, ImageFont, ImageFilter
 # image.save('img/scode.jpg', 'jpeg')
 
 #新建图像
-# newIm = Image.new('RGB',(100,100),'red')
-# newIm.save('img/01.png')
+newIm = Image.new('RGB',(100,100),'red')
+newIm.save('img/01.png')
 
 #更多功能请看api
 #https://pillow.readthedocs.io/en/latest/handbook/index.html
