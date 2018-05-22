@@ -17,6 +17,7 @@ SAX是一个基于事件的API，这就意味着它可以“在空中”处理�
 """
 1、xml.etree.ElementTree
 
+
 ElementTree生来就是为了处理XML，它在Python标准库中有两种实现：一种是纯Python实现的，
  如xml.etree.ElementTree，另一种是速度快一点的xml.etree.cElementTree。注意：尽量使用C语言实现的那种，因为它速度更快，而且消耗的内存更少。
 在CODE上查看代码片派生到我的代码片
