@@ -44,13 +44,13 @@
 # print("密码正确")
 
 #按行显示
-count = 1
-for i in range(1,1000+1):
-    if i%5 == 0 and i % 6 == 0:
-        print(i,end="  ")
-        if count%12 == 0:
-            print("")
-        count +=1
+# count = 1
+# for i in range(1,1000+1):
+#     if i%5 == 0 and i % 6 == 0:
+#         print(i,end="  ")
+#         if count%12 == 0:
+#             print("")
+#         count +=1
 
 #围棋棋盘
 # import turtle
@@ -75,18 +75,50 @@ for i in range(1,1000+1):
 #
 # turtle.done()
 
-import turtle
-turtle.showturtle()
+# import turtle
+# turtle.pensize(2)
+# turtle.showturtle()
+# step = 20
+#
+# for i in range(8):
+#     for j in  range(8):
+#         turtle.penup()
+#         turtle.goto(i*step,j*step)
+#         turtle.pendown()
+#
+#         turtle.begin_fill()
+#
+#         if (i+j)%2 == 0:
+#             turtle.color("white")
+#         else:
+#             turtle.color("black")
+#             for k in range(4):
+#                turtle.forward(step)
+#                turtle.right(90)
+#         turtle.end_fill()
+#
+# turtle.done()
 
-turtle.penup()
+import urllib.request
 
-step = 20
-turtle.begin_fill()
-for k in range(4):
-    turtle.forward(step)
-    turtle.right(90)
 
-turtle.end_fill()
-turtle.pendown()
+#网页屏蔽，refer
+url = "http://www.haodf.com/"
 
-turtle.done()
+def dowload1(url):
+    return  urllib.request.urlopen(url).read()
+
+def dowload2(url):
+    return  urllib.request.urlopen(url).readlines()
+
+def dowload3(url):
+    response = urllib.request.urlopen(url)
+    while True:
+        line = response.readline()
+        if not  line:
+            break
+        print(line)
+
+
+print(dowload3(url))
+
