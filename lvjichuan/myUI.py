@@ -5,13 +5,7 @@
 import wx
 from pyquery import PyQuery as pq
 
-# app = wx.App()
-# # window = wx.Frame(None, title="wxPython", size=(400, 300))
-# # panel = wx.Panel(window)
-# # label = wx.StaticText(panel, label="Hello World", pos=(100, 100))
-# # butt=wx.Button(panel,label="submit",pos=(150,150))
-# # window.Show(True)
-# # app.MainLoop()
+
 
 #爬取页面中全国城市代码
 def crawlWeb():
@@ -61,11 +55,44 @@ def searchCity(str):
                 break
     sfile.close()
 
+#根据代码抓取页面
+def crawlPage(citycode):
+    d = pq(url="http://www.weather.com.cn/weather/"+citycode+".shtml",encoding="utf-8")
+    p=d('ul.t').find("li")
+    alist=[]
+    for i in range(7):
+        v = p.eq(i)
+        olist=[]
+        olist.append(v.find("h1").text())
+        olist.append(v.find("p.wea").text())
+        olist.append(v.find("p.tem").text())
+        alist.append(olist)
+    print("打印完成")
+    print(alist)
+    return alist;
+
+
+#点击动作
+def onClicked(self):
+    print("hello")
+    clist=crawlPage("101010100")
+    str=""
+    for i in range(7):
+        str+=",".join(clist[i])+"\n"
+    label.SetLabel(str)
+
+# 创建UI页面
+app = wx.App()
+window = wx.Frame(None, title="查询天气", size=(400, 300))
+panel = wx.Panel(window)
+label = wx.StaticText(panel, label="Hello World", pos=(10, 10))
+butt=wx.Button(panel,label="查询",pos=(150,150))
+butt.Bind(wx.EVT_BUTTON,onClicked)
+window.Show(True)
+app.MainLoop()
 
 
 
-cityname=searchCity("北京")
-
-print(cityname)
+#crawlPage("101010100")
 
 
