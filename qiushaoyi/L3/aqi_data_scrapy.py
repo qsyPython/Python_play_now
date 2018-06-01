@@ -7,6 +7,7 @@
         然后处理数据做成如下的图表（x坐标为城市名称，y坐标为对应城市的AQI，title为：空气质量最好的50个城市，对应的更新时间为网页的 数据更新时间）
 '''
 import requests,csv
+from requests.exceptions import ReadTimeout,HTTPError,RequestException
 from bs4 import BeautifulSoup
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -43,8 +44,17 @@ def get_html_text(url):
 	'''
 		获取html文本
 	'''
-	r = requests.get(url,timeout=30)
-	return r.text
+	try:
+		r = requests.get(url, timeout=30)
+		print(r.status_code)
+		return r.text
+	except ReadTimeout:
+		print('timeout')
+	except HTTPError:
+		print('httperror')
+	except RequestException:
+		print('reqerror')
+
 
 def get_city_index_info(html_text):
 	'''

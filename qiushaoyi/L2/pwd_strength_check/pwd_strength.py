@@ -67,7 +67,8 @@ def main():
     try_times = 5
 
     module_path = path.dirname(__file__)#获取当前文件的绝对路径：包括包
-    filepath = module_path + '/password.txt'#拼接文件
+    filepath = module_path + '/password.txt'#拼接文件 获取最内层
+    filepath = 'L2/password_3.0.txt'#获取到L2文件下的目录
     file_tool = FileTool(filepath)
 
     while try_times > 0:
