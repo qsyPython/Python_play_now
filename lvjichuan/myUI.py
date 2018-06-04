@@ -4,6 +4,8 @@
 
 import wx
 from pyquery import PyQuery as pq
+import emailsms
+import smtplib
 
 #爬取页面中全国城市代码
 def crawlWeb():
@@ -89,6 +91,12 @@ def onClicked(self):
 def onMclicked(self):
     mail=inputMail.GetValue()
     # 此处忽略邮件发送过程
+    # from_address = 'foo@gmail.com'
+    # smtp = smtplib.SMTP("smtp.mail.yahoo.com", 587)
+    # smtp.starttls()
+    # smtp.login('username', 'password')
+    # smtp = emailsms.gmail_smtp(from_address, 'password')
+    # emailsms.send(smtp, from_address, '0000000000', "Hi it's me", 'Verizon')
     labelMail.SetLabel("已经发送到邮箱"+mail)
 
 
