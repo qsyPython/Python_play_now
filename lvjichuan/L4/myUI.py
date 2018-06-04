@@ -92,7 +92,6 @@ def onMclicked(self):
     labelMail.SetLabel("已经发送到邮箱"+mail)
 
 
-
 # 创建UI页面
 app = wx.App()
 #窗口标题
