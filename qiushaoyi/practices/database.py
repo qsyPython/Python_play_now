@@ -42,30 +42,41 @@
 
 '''
 ==========================practice 2: mysql ==========================
+MySQL服务器独立运行，需要支持Python的MySQL驱动来连接到MySQL服务器
 '''
+import mysql.connector
 
-# import mysql.connector
-#
-# conn = mysql.connector.connect(user='root',password='password',database='qsy_test')
-# cursor = conn.cursor()
-# cursor.execute('create table user (id varchar(20) primary key ,name varchar(20))')
-# cursor.execute('insert into user (id,name) values (%s,%s)',['1','我就测测而已'])
-# cursor.rowcount
-# print('获取到对应的行数：',cursor.rowcount)
-# conn.commit()
-# conn.close()
+conn = mysql.connector.connect(host='localhost',
+                               port = 3306,
+                               user = 'root',
+                               password='qsy112933',
+                               database='test11'
+                               )
+cursor = conn.cursor()
+cursor.execute('create table user (id varchar(20) primary key ,name varchar(20))')
+cursor.execute('insert into user (id,name) values (%s,%s)',['1','我就测测而已'])
+cursor.rowcount
+print('获取到对应的行数：',cursor.rowcount)
+conn.commit()
+cursor.close()
 
+cursor = conn.cursor()
+cursor.execute('select *from user where id= %s',('1',))
+values = cursor.fetchall()
+print(values)
+cursor.close()
+conn.close()
 
 '''
 ==========================practice 3: PyMySQL ==========================
 '''
-import pymysql
-
-db = pymysql.connect('localhost','qsy123','qsy123_password','test_sqlite')
-cusor = db.cursor()
-
-cusor.execute('SELECT VERSION()')
-data = cusor.fetchall()
-print('Database version :%s'%data)
-
-db.close()
+# import pymysql
+#
+# db = pymysql.connect('localhost','qsy123','qsy123','test_sqlite')
+# cusor = db.cursor()
+#
+# cusor.execute('SELECT VERSION()')
+# data = cusor.fetchall()
+# print('Database version :%s'%data)
+#
+# db.close()
