@@ -2,8 +2,9 @@
     CGI(Common Gateway Interface),通用网关接口。
     它是一段运行在服务器（如http服务器）上的程序。
     该接口可为客户端提供HTML页面的接口！
+
     接口的工作流程：以访问web的url为例
-    1、访问该url，连接到http的【web服务器】
+    1、访问该url，connect到http的【web服务器:如Apache服务器、Django服务器】
     2、web服务器收到请求后，【执行CGI】,解析url，在【database】/【file system】中查找访问的文件在服务器上是否存在，对就返回内容，否则报错返回
     3、浏览器从服务器上接收信息，并显示接收的文件或者错误信息
 
@@ -11,7 +12,7 @@
          1、配置Apache等web服务器
          2、配置Apache服务器 支持CGI
          3、配置CGI的处理程序
-    服务器访问地址：http://10.9.3.240/cgi-bin/py文件名.py
+    服务器访问url：http://10.9.3.240/cgi-bin/py文件名.py
 '''
 
 '''
@@ -346,7 +347,6 @@ python3中为http.cookies模块
 ==========================practice 10:下载文件  ==========================
 
 '''
-
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 
