@@ -42,31 +42,39 @@
 
 '''
 ==========================practice 2: mysql ==========================
-MySQL服务器独立运行，需要支持Python的MySQL驱动来连接到MySQL服务器
+本机安装mysql后，再安装MySQL驱动：
+pip3 install mysql-connector-python --allow-external mysql-connector-python 
+或者 pip3 install mysql-connector
+
+MySQL服务器独立运行，需要支持Python的MySQL驱动来连接到MySQL服务器。
 '''
 # import mysql.connector
-#
+# #
 # conn = mysql.connector.connect(host='localhost',
 #                                port=3306,
 #                                user='root',
 #                                password='qsy112933',
-#                                database='test_local'
+#                                database='local_mysql'
 #                                )
-# cursor = conn.cursor()
+# # cursor = conn.cursor()
 # cursor.execute('create table user(id varchar(20) primary key ,name varchar(20))')
 # # 执行插入sql语句
 # cursor.execute('insert into user (id,name) values (%s,%s)',['1','我就是本地sql1'])
 # cursor.execute('insert into user (id,name) values (%s,%s)',['2','我就是本地sql2'])
 # cursor.execute('insert into user (id,name) values (%s,%s)',['3','我就是本地sql3'])
 # # 执行删除sql语句
-# cursor.execute('delete from user where id=%s',('2',))
+# cursor.execute('delete from user where id=%s and name= %s',['2','我就是本地sql2'])
 # # 执行修改sql语句
-# cursor.execute('update user set name=\'我就是帅\' where id=\'3\'')
+# sql_update = 'update user set name=\'我就是帅\' where id=\'3\''
+# try:
+#     cursor.execute(sql_update)
+# except:
+#     conn.rollback()
 # cursor.rowcount
 # print('获取到游标此时对应的行数：',cursor.rowcount)
 # conn.commit()
 # cursor.close()
-
+#
 # cursor = conn.cursor()
 # # 执行查询sql语句
 # cursor.execute('select *from user where id= %s and name= %s',['1','我就是本地sql1'])
@@ -97,33 +105,104 @@ class User(object):
     User('3', 'Adam')
 ]
 这就是传说中的ORM技术：Object-Relational Mapping，把关系数据库的表结构映射到对象上
-python中最著名ORM:SQLAlchemy
+python中最著名ORM:SQLAlchemy。
+id需要动态调节，因为是基键！
+ORM框架的作用就是把数据库表的一行记录与一个对象互相做自动转换。
+
 '''
 
+# # 导入依赖
+# from sqlalchemy import Column, String, create_engine
+# from sqlalchemy.orm import sessionmaker
+# from sqlalchemy.ext.declarative import declarative_base
+#
+# # 创建对象的基类
+# Base = declarative_base()
+#
+# # 定义User对象
+# class User(Base):
+#     # 表的名字
+#     __tablename__ = 'user'
+#
+#     # 表的结构
+#     id = Column(String(20), primary_key=True)
+#     name = Column(String(20))
+#
+#
+# # 初始化数据库链接
+# database_info = {'username':'root',
+#                  'password':'qsy112933',
+#                  'host':'localhost',
+#                  'port':'3306',
+#                  'database':'local_sqlalchemy'}
+# engine = create_engine('mysql+mysqlconnector://{username}:{password}@{host}:{port}/{database}'.format_map(database_info))
+# # 创建DBSession类型
+# DBSession = sessionmaker(bind=engine)
+#
+# #增加
+#
+# # 创建Session对象
+# session = DBSession()
+# # 创建User对象
+# new_user = User(id='5', name='Bob')
+# session.add(new_user)
+# # 提交
+# session.commit()
+# # 关闭session
+# session.close()
+#
+#
+# # 查询
+# # 创建session
+# session = DBSession()
+# # 利用session创建查询，query(对象类).filter(条件).one()/all()
+# user = session.query(User).filter(User.id=='5').one()
+# print('type:{0}'.format(type(user)))
+# print('name:{0}'.format(user.name))
+# # 关闭session
+# session.close()
+#
+#
+# # 更新
+# session = DBSession()
+# user_result = session.query(User).filter_by(id='1').first()
+# user_result.name = "jack"
+# session.commit()
+# session.close()
+#
+#
+# # 删除
+# session = DBSession()
+# user_willdel = session.query(User).filter_by(id='1').first()
+# session.delete(user_willdel)
+# session.commit()
+# session.close()
 
 '''
-==========================practice 4: PyMySQL ==========================
+==========================practice 4: PyMySQL：py可用的mysql ==========================
+pip3 install Pymysql
 '''
-# import pymysql
-#
-# db = pymysql.connect('localhost','root','qsy112933','test_local')
-# cusor = db.cursor()
-#
-# cusor.execute('SELECT VERSION()')
-# data = cusor.fetchall()
-# print('Database version :%s'%data)
-# cusor.close()
-# db.close()
-#
-#
-# db = pymysql.connect('localhost','root','qsy112933','test_local',charset='utf8')
-# cusor = db.cursor()
-#
-# # 如果有就删除
-# sql_del = 'drop table if exists employee'
-# cusor.execute(sql_del)
-# sql_create = 'create table employee (id varchar(20) primary key,sex varchar(20))'
-# cusor.execute(sql_create)
-# cusor.execute('insert into employee (id,sex) values (%s,%s)',['1','男'])
-# db.commit()
-# db.close()
+
+import pymysql
+
+db = pymysql.connect('localhost','root','qsy112933','local_python_mysql')
+cusor = db.cursor()
+
+cusor.execute('SELECT VERSION()')
+data = cusor.fetchall()
+print('Database version :%s'%data)
+cusor.close()
+db.close()
+
+
+db = pymysql.connect('localhost','root','qsy112933','local_python_mysql',charset='utf8')
+cusor = db.cursor()
+
+# 如果有就删除
+sql_del = 'drop table if exists employee'
+cusor.execute(sql_del)
+sql_create = 'create table employee (id varchar(20) primary key,sex varchar(20))'
+cusor.execute(sql_create)
+cusor.execute('insert into employee(id,sex) values (%s,%s)',['1','男'])
+db.commit()
+db.close()
