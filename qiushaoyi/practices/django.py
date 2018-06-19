@@ -4,11 +4,11 @@ diango 使用
 diango结构：
        __init__py:目录结构,和调用有关的包初始文件
        urls.py 网址，关联到对应的views.py中的一个函数，访问网址就是调用某个函数
-       settings.py 设置配置文件，比如 DEBUG 的开关，静态文件的位置等
-       wsgi.py:
-       manage.py:
+       settings.py 设置配置文件，比如 DEBUG 的开关，模板文件、静态文件等
+       wsgi.py: 部署服务器
+       manage.py:diango程序的执行入口
 
-       views.py 处理用户发出的请求，通过渲染templates中的网页可以将显示内容
+       views.py ：处理用户发出的请求，通过渲染templates中的网页可以将显示内容
        models.py 与数据库操作相关，存入或读取数据
        forms.py 表单，用户在浏览器上输入数据提交，对数据的验证工作以及输入框的生成等工作；
                 templates 文件夹，views.py中的函数渲染templates中的Html模板，动态内容的网页，缓存用
@@ -38,7 +38,7 @@ lssitepackages: 列出当前环境安装了的包
 '''
 
 '''
-==========================practice 1:搭建django 项目和app  ==========================
+==========================practice 1:搭建django 项目和apps  ==========================
 1、获取django项目路径：cd /Users/mac/Desktop/Python_play_now/qiushaoyi/programs
 2、创建项目：django-admin startproject django_first（名称）
 3、进入项目目录: cd django_first
@@ -59,6 +59,7 @@ python3 manage.py runserver 8001
 python3 manage.py runserver 9999
 # 监听机器所有可用ip （电脑可能有多个内网ip或多个外网ip）：
 python3 manage.py runserver 0.0.0.0:8000）
+
 补充： 
     接口的工作流程：以访问web的url为例
     1、访问该url，connect到http的【web服务器:如Apache服务器、Django服务器】
@@ -92,7 +93,97 @@ from django.http import HttpResponse
 def index(request):
     return HttpResponse(u'欢迎跟着你少一哥哥学习django')
 
-project的urls：定义视图函数相关的URL
+project的urls：定义视图函数相关的URL。如下：
+  path('add/',app_second_views.add,name='add'), #实现加法功能，需要手动拼参数：访问方式 http://127.0.0.1:8000/add/?a=4&b=5
+name 可以用于在 templates, models, views ……中得到对应的网址，相当于“给网址取了个名字”。
+只要这个名字不变，网址变了也能通过名字获取到。
+
+问题1、使用name写死网站的后果：
+如果这样写“死网址”，会使得在改了网址（正则）后，
+模板（templates)，
+视图(views.py，比如用于URL跳转)，
+模型(models.py，获取记录访问地址等）用了此网址的，
+都必须进行相应的更改，修改的代价很大，一不小心，有的地方没改过来，就不能用了
+
+解决办法->：在模板、视图和模型中均使用name作为url的连接key，只要name不变，path/url正则即使随便改变，也会被链接到。
+
+进入python shell:(可快速获取某个name对应url的方法，这里的name本质上是key)
+python3 manage.py shell
+
+from django.urls import reverse  # Django 1.10.x - Django 2.x 新的，更加规范了
+>>> reverse('add2', args=(4,5))
+u'/add/4/5/'
+>>> reverse('add2', args=(444,555))
+u'/add/444/555/'
+
+问题2、用户收藏的url为旧的，如何让以前的 /add/3/4/自动跳转到现在新的网址呢？
+在views添加跳转函数,具体查看app_second实例
+
+
+问题3、查找机制，导致模板名称会找错？
+在每个templates中新建一个app同名的file就ok,但所有涉及到的html文件使用必须加上该apo的文件路径
+
+
+
+然后可再在某个端口执行服务：默认是8000
+python manage.py runserver 8002
+
+'''
+
+'''
+==========================practice 2: 走一波项目  ==========================
+1、db中使用的字段：
+__双下划线不合法 + python的所有关键字也不合法
+查询方法：import keyword; print(keyword.kwlist) 可以打出所有的关键字
+
+2、使用python3的shell操作指令：
+from people.models import Person 
+# 新建对象4种方式:
+1、Person.objects.create(name='我擦',age=11)
+2、p = Person(name='woca',age=12)
+p.save()
+3、p = Person(name='rilegoule')
+p.age = 12
+p.save()
+4、Person.objects.get_or_create(name='喔吼吼',name = 33)
+
+获取对象的3种方法：
+Person.objects.all()
+Person.objects.all()[:10] 切片可以节约内存
+Person.objects.get(name='得到名字为xxx的数据')
+Person.objects.filter(name='abc')
+Person.objects.filter(name__iexact='abc') #名称为abc并不区分大小写
+Person.objects.filter(name__contain= 'ab')
+Person.objects.filter(name__icontain='ab')#名称中包含 "abc"，且abc不区分大小写
+Person.objects.filter(name__regex='^abc')# 正则表达式查询
+Person.objects.filter(name_iregex='^abc')# 正则表达式不区分大小写
+Person.objects.exclude(name__contains='WC')
+Person.objects.filter(name__contains='abc').exlude(age=23)
+
+
+2、QuerySet：数据库接口shell操作：
+
+# 创建对象的方法4种：
+from blog.models import Blog
+
+b = Blog()
+b.name = 'uenjasdgj77'
+b.tagline = 'uoeiuoijgiojg'
+b.save()
+
+
+b = Blog(name='hjhd')
+b.tagline = 'ashkgdhkjhgs'
+b.save()
+
+b = Blog(name='qsy Blog',tagline='结束了就够了大街上管理局')
+b.save()
+
+
+
+Blog.objects.create(name='我嫉妒更好',tagline='hkjhagkj')
+
+
 
 
 '''

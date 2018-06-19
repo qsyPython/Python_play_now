@@ -41,11 +41,11 @@ class Command(ScrapyCommand):
         parser.add_option("-e", "--edit", dest="edit", action="store_true",
             help="Edit spider after creating it")
         parser.add_option("-d", "--dump", dest="dump", metavar="TEMPLATE",
-            help="Dump template to standard output")
-        parser.add_option("-t", "--template", dest="template", default="basic",
-            help="Uses a custom template.")
+            help="Dump templates to standard output")
+        parser.add_option("-t", "--templates", dest="templates", default="basic",
+            help="Uses a custom templates.")
         parser.add_option("--force", dest="force", action="store_true",
-            help="If the spider already exists, overwrite it with the template")
+            help="If the spider already exists, overwrite it with the templates")
 
     def run(self, args, opts):
         if opts.list:
@@ -84,7 +84,7 @@ class Command(ScrapyCommand):
                 self.exitcode = os.system('scrapy edit "%s"' % name)
 
     def _genspider(self, module, name, domain, template_name, template_file):
-        """Generate the spider module, based on the given template"""
+        """Generate the spider module, based on the given templates"""
         tvars = {
             'project_name': self.settings.get('BOT_NAME'),
             'ProjectName': string_camelcase(self.settings.get('BOT_NAME')),
@@ -103,7 +103,7 @@ class Command(ScrapyCommand):
         spider_file = "%s.py" % join(spiders_dir, module)
         shutil.copyfile(template_file, spider_file)
         render_templatefile(spider_file, **tvars)
-        print("Created spider %r using template %r " % (name, \
+        print("Created spider %r using templates %r " % (name, \
             template_name), end=('' if spiders_module else '\n'))
         if spiders_module:
             print("in module:\n  %s.%s" % (spiders_module.__name__, module))
@@ -112,7 +112,7 @@ class Command(ScrapyCommand):
         template_file = join(self.templates_dir, '%s.tmpl' % template)
         if exists(template_file):
             return template_file
-        print("Unable to find template: %s\n" % template)
+        print("Unable to find templates: %s\n" % template)
         print('Use "scrapy genspider --list" to see all available templates.')
 
     def _list_templates(self):

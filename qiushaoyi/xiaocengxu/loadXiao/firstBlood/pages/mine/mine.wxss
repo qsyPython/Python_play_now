@@ -1,0 +1,4 @@
+/*mine.wxss*/
+.TapViewNavBar {
+  background-color: greenyellow
+}

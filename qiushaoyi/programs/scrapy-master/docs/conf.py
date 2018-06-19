@@ -144,11 +144,11 @@ html_static_path = ['_static']
 # using the given strftime format.
 html_last_updated_fmt = '%b %d, %Y'
 
-# Custom sidebar templates, maps document names to template names.
+# Custom sidebar templates, maps document names to templates names.
 #html_sidebars = {}
 
 # Additional templates that should be rendered to pages, maps page names to
-# template names.
+# templates names.
 #html_additional_pages = {}
 
 # If false, no module index is generated.

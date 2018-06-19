@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>我是app_third</title>
+</head>
+<body>
+
+{% extends 'app_third/base.html' %}
+
+{% block title %}欢迎光临首页{% endblock %}
+
+{% block content %}
+{% include 'app_third/app_third_nav.html' %}
+这里是首页，欢迎光临
+{% endblock %}
+
+</body>
+</html>

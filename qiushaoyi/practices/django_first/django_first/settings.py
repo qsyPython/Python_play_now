@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'app_first',
     'app_second',
     'app_third',
+    'app_forth',
 
 ]
 

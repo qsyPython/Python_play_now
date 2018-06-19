@@ -1,0 +1,9 @@
+<!--mineindex  -->
+<view>{{text}}</view>
+<button bindtap='clickBtn'>Change normal data切换TabBar</button>
+<view>{{num}}</view>
+<view>{{array1[0].msg}}</view>
+<view>{{array2[0].msg}}</view>
+<view bindtap='ViewTap' class='TapViewNavBar'>点我view跳转到新navigationbar</view>
+<button bindtap='JumpAnyPage'>点我跳转到任何界面</button>
+<view>{{object.text}}</view>

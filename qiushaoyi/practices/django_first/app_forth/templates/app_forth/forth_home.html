@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>我是第4个app</title>
+</head>
+<body>
+
+<!--实例1: {}表示执行逻辑，\{\{\}\}'表示作为标签的text -->
+<!--{{string}}-->
+
+<!--实例2-->
+<!--教程列表如下：-->
+<!--{% for i in tutorialList %}-->
+<!--{{ i }}-->
+<!--{% endfor %}-->
+
+<!--实例3-->
+<!--{% for key,value in info_dict.items %}-->
+<!--{{key}}:{{value}}-->
+<!--{% endfor %}-->
+<!--或者-->
+<!--站点：{{info_dict.site}}-->
+<!--内容：{{info_dict.content}}-->
+
+<!--实例4: forloop.last变量不是last加，是的话不加; 添加list为空的排异处理-->
+<!--{% for item in list %}-->
+<!--{{item}}{% if not forloop.last %},{% endif %}-->
+
+<!--{% empty %}-->
+<!--<li>抱歉，列表为空</li>-->
+
+<!--{% endfor %}-->
+
+<!--实例5:根据name获取url和参数 -->
+<!--{% url 'forth_add' 77 88 %}-->
+
+<!--实例6: -->
+<!--{% if var >= 90 %}-->
+<!--成绩优秀-->
+<!--{% elif var >= 80 %}-->
+<!--成绩良好-->
+<!--{% elif var >= 70 %}-->
+<!--成绩一般-->
+<!--{% elif var >= 60 %}-->
+<!--需要努力-->
+<!--{% else %}-->
+<!--不及格啊，大兄弟！-->
+<!--{% endif %}-->
+<!--{% if num <= 100 and num >= 0 %}-->
+<!--num在0到100之间-->
+<!--{% else %}-->
+<!--数值不在范围之内！-->
+<!--{% endif %}-->
+
+
+<!--实例7: -->
+获取当前登陆账户：{{request.user}}
+获取当前网站：{{request.path}}
+获取当前GET参数：{{request.GET.urlencode}}
+=======分隔符=========
+{% if request.user.is_authenticated %}
+{{ request.user.username}}
+你好
+{% else %}
+请登陆，这里放登陆链接
+{% endif %}
+
+
+</body>
+</html>
