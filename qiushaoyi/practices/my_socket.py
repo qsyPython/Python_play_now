@@ -112,10 +112,9 @@ TCP连接创建的是双向通道，双方都可以同时给对方发数据。�
 1、u/U:表示unicode字符串 如 u'我肋骨去hhh333'，对字符串进行unicode编码
 2、r/R:非转义的原始字符串 如 r'我肋个去\nhhh\r是\t333',该字符串中\n\r\t均不再表示特殊的字符的含义，字符串写的啥就是啥！
 3、b :表示 bytes       如  b'\xe4\xb8\xad\xe6333aaa'，表示字节，bytes每个字符都只占用一个字节。
-str变为bytes，通过encode()方法可以编码为指定的bytes
-bytes变为str，就需要用decode()方法：
+为经过编码为bytes的字符串，通过str.encode('utf-8')方法可选择对应的编码（'ascii'）/('utf-8')/('gbk')方式
+解码，就需要用decode()方法：
 '''
-
 # import socket
 # s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 # s.connect(('127.0.0.1',9999))
@@ -151,7 +150,6 @@ bytes变为str，就需要用decode()方法：
 #     s.sendto(b'Hello,%s!'%data,addr)
 
 
-
 '''
 ==========================practice 5: UDP协议使用 client.py=========================
 使用UDP协议时，不需要建立连接，只需要知道对方的IP地址和端口号，就可以直接发数据包
@@ -159,14 +157,20 @@ bytes变为str，就需要用decode()方法：
 投资：努力、眼光、销售渠道、势
 
 '''
-import socket
-s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-for data in [b'Michael', b'Tracy', b'Sarah']:
-    # 发送数据:
-    s.sendto(data, ('127.0.0.1', 9999))
-    # 接收数据:
-    print(s.recv(1024).decode('utf-8'))
-s.close()
+# import socket
+# s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+# for data in [b'Michael', b'Tracy', b'Sarah']:
+#     # 发送数据:
+#     s.sendto(data, ('127.0.0.1', 9999))
+#     # 接收数据:
+#     print(s.recv(1024).decode('utf-8'))
+# s.close()
+
+
+# 编码解码走一波
+tt1 = '我就改了沮丧看了jjj'
+tt2 = b'\xd3\xc3\xbb\xa7\xce\xde\xc8\xa8\xb5\xc7\xc2\xbd'
+print(tt1.encode('utf-8',errors='ignore'),tt2.decode('gbk',errors='ignore'))
 
 
 
