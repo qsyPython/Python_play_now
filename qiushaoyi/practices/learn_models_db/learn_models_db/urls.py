@@ -1,4 +1,4 @@
-"""learn_models URL Configuration
+"""learn_models_db URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/dev/topics/http/urls/
@@ -23,5 +23,6 @@ from blog import views as blog_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+
 
 ]

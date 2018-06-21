@@ -20,11 +20,11 @@ def minute(request):
     c = int(a) - int(b)
     return HttpResponse(str(c))
 
-#渲染template使用render
+# 渲染template使用render
 def index(request):
     return render(request,'app_second/second_home.html')
 
-#处理用户收藏了旧url自动跳转新url
+# 处理用户收藏了旧url自动跳转新url
 def old_add2_redirect(request,a,b):
     return HttpResponseRedirect(
         reverse('add2',args=(4,5))

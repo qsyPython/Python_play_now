@@ -26,7 +26,7 @@ class Entry(models.Model):
     pub_date = models.DateField()
     mod_date = models.DateField()
 
-    # 会额外建表：blog_entry_authors
+    # 额外建表：blog_entry_authors
     authors = models.ManyToManyField(Author)
     n_comments = models.IntegerField()
     n_pingbacks = models.IntegerField()

@@ -44,10 +44,11 @@ lssitepackages: 列出当前环境安装了的包
 3、进入项目目录: cd django_first
 4、新建app：python3 manage.py startapp app_first（名称）
 
-创建数据库表 或 更改数据库表或字段
+创建数据库表 或 更改数据库表或字段 
 # 1. 在django的project下，创建更改的文件：python3 manage.py makemigrations
 # 2. 将生成的py文件应用到数据库：python3 manage.py migrate（创建的是sqlite3，若要建mysql文件，sqlmigrate）
-# 3. 清空数据库:python3 manage.py flush
+# 3.python3 manage.py syncdb
+  3. 清空数据库:python3 manage.py flush
 # 4. 复制appdata的数据库内容：python3 manage.py dumpdata appname > appname.json
 # 5. 加载appdata的数据库内容：python3 manage.py loaddata appname.json
 
@@ -130,6 +131,10 @@ python manage.py runserver 8002
 
 '''
 
+
+
+
+
 '''
 ==========================practice 2: 走一波项目  ==========================
 1、db中使用的字段：
@@ -138,7 +143,8 @@ __双下划线不合法 + python的所有关键字也不合法
 
 2、使用python3的shell操作指令：
 from people.models import Person 
-# 新建对象4种方式:
+
+# 增加对象4种方式:
 1、Person.objects.create(name='我擦',age=11)
 2、p = Person(name='woca',age=12)
 p.save()
@@ -147,43 +153,52 @@ p.age = 12
 p.save()
 4、Person.objects.get_or_create(name='喔吼吼',name = 33)
 
-获取对象的3种方法：
+# 查询 对象的n种方法：
+
 Person.objects.all()
 Person.objects.all()[:10] 切片可以节约内存
+
 Person.objects.get(name='得到名字为xxx的数据')
+
 Person.objects.filter(name='abc')
 Person.objects.filter(name__iexact='abc') #名称为abc并不区分大小写
 Person.objects.filter(name__contain= 'ab')
 Person.objects.filter(name__icontain='ab')#名称中包含 "abc"，且abc不区分大小写
 Person.objects.filter(name__regex='^abc')# 正则表达式查询
 Person.objects.filter(name_iregex='^abc')# 正则表达式不区分大小写
-Person.objects.exclude(name__contains='WC')
 Person.objects.filter(name__contains='abc').exlude(age=23)
+Person.objects.exclude(name__contains='WC')
+
+# 删除：
+Person.objects.filter(name__contains='abc').delete()
+
+# 更新：
+Persoon.objects.get(name='wocao').update(name='nima',email='1379587985@qq.com')
+Person.objects.filter(name__contains='abc).update(name='我是新name')
+
+# 异常判断
+if Person.objects.all().exists(): 表中是否存在数据
+Person.objects.count()>0 表中是否存在数据
+
+# pickle序列化和反序列化
+import pickle
+s = Person.objects.all()  Entry.objects.all() 或者 es 是QuerySet 是查询所有的 Entry 条目
+query = pickle.loads(s)
+qs = Person.objects.all
+qs.query = query
 
 
 2、QuerySet：数据库接口shell操作：
+当有一对多，多对一，或者多对多的关系的时候，先把相关的对象查询出来
+>>> from blog.models import Entry
+>>> entry = Entry.objects.get(pk=1)
+>>> cheese_blog = Blog.objects.get(name="Cheddar Talk")
+>>> entry.blog = cheese_blog
+>>> entry.save()
 
-# 创建对象的方法4种：
-from blog.models import Blog
-
-b = Blog()
-b.name = 'uenjasdgj77'
-b.tagline = 'uoeiuoijgiojg'
-b.save()
-
-
-b = Blog(name='hjhd')
-b.tagline = 'ashkgdhkjhgs'
-b.save()
-
-b = Blog(name='qsy Blog',tagline='结束了就够了大街上管理局')
-b.save()
-
-
-
-Blog.objects.create(name='我嫉妒更好',tagline='hkjhagkj')
 
 
 
 
 '''
+
