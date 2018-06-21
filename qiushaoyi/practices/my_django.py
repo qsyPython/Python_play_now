@@ -38,7 +38,7 @@ lssitepackages: 列出当前环境安装了的包
 '''
 
 '''
-==========================practice 1:搭建django 项目和apps  ==========================
+==========================practice 1:搭建django 项目、apps 和 数据库基本操作  ==========================
 1、获取django项目路径：cd /Users/mac/Desktop/Python_play_now/qiushaoyi/programs
 2、创建项目：django-admin startproject django_first（名称）
 3、进入项目目录: cd django_first
@@ -72,7 +72,8 @@ python3 manage.py runserver 0.0.0.0:8000）
 # 修改 用户密码可以用：python3 manage.py changepassword username(名称)
 
 
-Django项目环境终端（调用django中的某些py文件的API）：python3 manage.py shell    退出：exit()
+Django项目环境终端（调用django中的某些py文件的API）：python3 manage.py shell    
+退出：exit()
 数据库命令行（操作数据库）： python3 manage.py dbshell
 
 
@@ -84,7 +85,7 @@ Django项目环境终端（调用django中的某些py文件的API）：python3 m
 
 
 '''
-==========================practice 2: 走一波项目  ==========================
+==========================practice 2: 创建项目走一波 和 结构  ==========================
 django-admin startproject project_name
 python3 manage.py startapp app_name
 project的settings：在末尾添加app_name,（你就不添加？好，django就不能自动找到app中的模板文件(app-name/templates/下的文件)和静态文件(app-name/static/中的文件) ）
@@ -99,7 +100,7 @@ project的urls：定义视图函数相关的URL。如下：
 name 可以用于在 templates, models, views ……中得到对应的网址，相当于“给网址取了个名字”。
 只要这个名字不变，网址变了也能通过名字获取到。
 
-问题1、使用name写死网站的后果：
+问题1、不用name，写死网站的后果：
 如果这样写“死网址”，会使得在改了网址（正则）后，
 模板（templates)，
 视图(views.py，比如用于URL跳转)，
@@ -121,13 +122,12 @@ u'/add/444/555/'
 在views添加跳转函数,具体查看app_second实例
 
 
-问题3、查找机制，导致模板名称会找错？
-在每个templates中新建一个app同名的file就ok,但所有涉及到的html文件使用必须加上该apo的文件路径
-
+问题3、模板内容的查找机制，导致模板名称会找错？
+在每个templates中新建一个app同名的file就ok,但所有涉及到的html文件使用必须加上该app的文件路径
 
 
 然后可再在某个端口执行服务：默认是8000
-python manage.py runserver 8002
+python manage.py runserver 8002（端口可不写）
 
 '''
 
@@ -136,10 +136,10 @@ python manage.py runserver 8002
 
 
 '''
-==========================practice 2: 走一波项目  ==========================
+==========================practice 3: QuerySet数据库接口基础和进阶  ==========================
 1、db中使用的字段：
 __双下划线不合法 + python的所有关键字也不合法
-查询方法：import keyword; print(keyword.kwlist) 可以打出所有的关键字
+查询python关键字方法：import keyword; print(keyword.kwlist) 可以打出所有的关键字
 
 2、使用python3的shell操作指令：
 from people.models import Person 
@@ -151,7 +151,10 @@ p.save()
 3、p = Person(name='rilegoule')
 p.age = 12
 p.save()
-4、Person.objects.get_or_create(name='喔吼吼',name = 33)
+
+4、p,created = Person.objects.get_or_create(name='喔吼吼',test = 33)
+p.age = 18
+p.save()
 
 # 查询 对象的n种方法：
 
@@ -168,6 +171,19 @@ Person.objects.filter(name__regex='^abc')# 正则表达式查询
 Person.objects.filter(name_iregex='^abc')# 正则表达式不区分大小写
 Person.objects.filter(name__contains='abc').exlude(age=23)
 Person.objects.exclude(name__contains='WC')
+
+# 索引和排序
+Person.objects.all().order_by('name')
+Person.objects.all().order_by('-name') #倒序
+
+链式查询
+Person.objects.filter(name__contains='qsy').filter(email='tuweizhong@163.com')
+Person.objects.filter(name__contains='qsy').exclude(email='tuweizhong@163.com')
+
+Person.objects.all()[-10:] 不支持负索引，会报错！！！
+Person.objects.order_by('-id')[:20] # 但支持column为负，查询id最大的20条
+Person.objects.all().reverse()[:3] 后3位
+Person.objects.all().reverse()[0] 最后1个
 
 # 删除：
 Person.objects.filter(name__contains='abc').delete()
@@ -187,6 +203,15 @@ query = pickle.loads(s)
 qs = Person.objects.all
 qs.query = query
 
+# QuerySet 重复的问题，使用 .distinct() 去重
+qs1 = Person.objects.filter(name='x')
+qs2 = Person.objects.filter(email='qsy118614@126.com')
+qs3 = Person.objects.filter(age='23')
+
+qs = qs1 | qs2 | qs3
+
+qs = qs.distinct()
+
 
 2、QuerySet：数据库接口shell操作：
 当有一对多，多对一，或者多对多的关系的时候，先把相关的对象查询出来
@@ -195,6 +220,8 @@ qs.query = query
 >>> cheese_blog = Blog.objects.get(name="Cheddar Talk")
 >>> entry.blog = cheese_blog
 >>> entry.save()
+
+
 
 
 

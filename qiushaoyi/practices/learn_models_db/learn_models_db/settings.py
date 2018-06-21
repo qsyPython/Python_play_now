@@ -87,6 +87,9 @@ DATABASES = {
         "OPTIONS" : {'init_command':"SET sql_mode='NO_ENGINE_SUBSTITUTION,STRICT_TRANS_TABLES'"},
     }
 
+    #若遇Warning: (3135, "'NO_ZERO_DATE', 'NO_ZERO_IN_DATE' and 'ERROR_FOR_DIVISION_BY_ZERO' sql modes should be used with strict mode.
+    # 修改'sql_mode': 'traditional'
+
     # 'default': {
     #     'ENGINE': 'django.db.backends.sqlite3',
     #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
