@@ -47,11 +47,10 @@ lssitepackages: 列出当前环境安装了的包
 创建数据库表 或 更改数据库表或字段 
 # 1. 在django的project下，创建更改的文件：python3 manage.py makemigrations
 # 2. 将生成的py文件应用到数据库：python3 manage.py migrate（创建的是sqlite3，若要建mysql文件，sqlmigrate）
-# 3.python3 manage.py syncdb
   3. 清空数据库:python3 manage.py flush
 # 4. 复制appdata的数据库内容：python3 manage.py dumpdata appname > appname.json
 # 5. 加载appdata的数据库内容：python3 manage.py loaddata appname.json
-
+# 6. 数据库命令行（sql语句操作数据库）： python3 manage.py dbshell
 
 使用开发服务器(实现修改代码后会自动重启): django的服务器
 python3 manage.py runserver
@@ -70,11 +69,6 @@ python3 manage.py runserver 0.0.0.0:8000）
     
 # 创建超级管理员 ：python3 manage.py createsuperuser（按照提示输入用户名和对应的密码就好了邮箱可以留空，用户名和密码必填） 
 # 修改 用户密码可以用：python3 manage.py changepassword username(名称)
-
-
-Django项目环境终端（调用django中的某些py文件的API）：python3 manage.py shell    
-退出：exit()
-数据库命令行（操作数据库）： python3 manage.py dbshell
 
 
 总结：不同的指令实现不同的功能
@@ -133,17 +127,15 @@ python manage.py runserver 8002（端口可不写）
 
 
 
-
-
 '''
 ==========================practice 3: QuerySet数据库接口基础和进阶  ==========================
 1、db中使用的字段：
 __双下划线不合法 + python的所有关键字也不合法
 查询python关键字方法：import keyword; print(keyword.kwlist) 可以打出所有的关键字
 
-2、使用python3的shell操作指令：
-from people.models import Person 
+2、使用python3的shell操作指令(python3 manage.py shell):
 
+from people.models import Person
 # 增加对象4种方式:
 1、Person.objects.create(name='我擦',age=11)
 2、p = Person(name='woca',age=12)
@@ -223,8 +215,71 @@ qs = qs.distinct()
 
 
 
+3、sql的高阶：query、values_list、values
+python3 manage.py shell
+1. query 查看 Django Queryset 到底是如何执行的SQL语句
+Author.objects.all().query.__str__()
+SELECT id, name, qq, addr,email
+
+print (str(Author.objects.filter(name="邱少1").query))  
+== Author.objects.filter(name="邱少1").query.__str__()
+
+SELECT id, name, qq, addr,email FROM blog_author WHERE name='邱少1';
+
+2、values_list 获取()形式的query结果,若flat=True时获取的不是元组
+authors = Author.objects.values_list('name','qq')
+list(authors) 获取到name和qq的元组的list:[('qsy', '504844265'), ('邱少2', '198496925'), ('邱少1', '110237849'), ('邱少3', '035755895')]
+
+authors = Author.objects.values_list('name', flat=True)
+list(authors) 获取到name的list:
+
+查询 邱少1 这个人的文章标题
+Article.objects.filter(author__name='邱少1').values_list('title',flat=True)
+
+3、values 获取dic典形式的结果
+Author.objects.values('name', 'qq')
+查询 邱少1 这个人的文章标题
+Article.objects.filter(author__name='邱少1').values('title')
+
+4、extra 实现 别名，条件，排序等： defer可以屏蔽某个字段名
+tags = Tag.objects.all().extra(select={'tag_name': 'name'})
+tags[0].name == tags[0].tag_name
+
+Tag.objects.all().extra(select={'tag_name': 'name'}).defer('name').query.__str__()
 
 
+5. annotate(聚合) 计数，平均数,求和等
+from django.db.models import Count
+from django.db.models import Avg
+from django.db.models import Sum
+
+Article.objects.all().values('author_id').annotate(count=Count('author')).values('author_id', 'count')
+Article.objects.values('author_id').annotate(avg_score=Avg('score')).values('author_id', 'avg_score')
+Article.objects.values('')
+
+
+6、select_related 优化一对一，多对一查询, 无需重复查询。
+articles = Article.objects.all().select_related('author')[:10]
+
+a1 = articles[0] # 查询第1篇文章
+
+a1.title  # 获取标题title!!
+a1.author.name  # 没有再次查询数据库！！
+
+
+7. prefetch_related 优化一对多，多对多查询
+Article.objects.all().prefetch_related('tags')[:10]
+
+
+8. defer 排除不需要的字段
+Article.objects.all()
+Article.objects.all().defer('content') # 不需要查询获取文章内容
+
+9. only 仅选择需要的字段
+Author.objects.all().only('name')
+Author.objects.raw('select name from blog_author limit 1')
+
+author = authors[0]
 
 
 '''

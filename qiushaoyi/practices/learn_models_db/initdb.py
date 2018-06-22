@@ -42,4 +42,4 @@ if __name__ == '__main__':
     main()
     print('Done')
 
-# 直接在python的Terminal执行: python3 initdb.py
+# 直接在python的Terminal执行py

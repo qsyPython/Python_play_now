@@ -41,6 +41,7 @@
 from __future__ import unicode_literals
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
+from django.contrib import admin
 
 @python_2_unicode_compatible
 class Author(models.Model):
@@ -69,9 +70,6 @@ class Tag(models.Model):
 
     def __str__(self):
         return self.name
-
-
-
 
 
 

@@ -135,3 +135,22 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+
+# DEBUG 为 True 的时候，我们可以看出 django 执行了什么 SQL 语句
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'django.db.backends': {
+            'handlers': ['console'],
+            'level': 'DEBUG' if DEBUG else 'INFO',
+        },
+    },
+}
+
+
