@@ -277,10 +277,13 @@ Article.objects.all().defer('content') # 不需要查询获取文章内容
 
 9. only 仅选择需要的字段
 Author.objects.all().only('name')
-Author.objects.raw('select name from blog_author limit 1')
 
-author = authors[0]
+10.自定义聚合功能:将符合某分组条件(group by)的不同的值连到一起，作为整体返回。
 
+
+# Django 自定义Field
+1. 减少文本的长度，保存数据的时候压缩，读取的时候解压缩，
+如果发现压缩后更长，就用原文本直接存储
 
 '''
 
