@@ -5,7 +5,7 @@ import unittest
 from scrapy.utils.template import render_templatefile
 
 
-__doctests__ = ['scrapy.utils.template']
+__doctests__ = ['scrapy.utils.templates']
 
 
 class UtilsRenderTemplateFileTestCase(unittest.TestCase):

@@ -111,7 +111,7 @@ class StartprojectTemplatesTest(ProjectTest):
         args = ['--set', 'TEMPLATES_DIR=%s' % self.tmpl]
         p = self.proc('startproject', self.project_name, *args)
         out = to_native_str(retry_on_eintr(p.stdout.read))
-        self.assertIn("New Scrapy project %r, using template directory" % self.project_name, out)
+        self.assertIn("New Scrapy project %r, using templates directory" % self.project_name, out)
         self.assertIn(self.tmpl_proj, out)
         assert exists(join(self.proj_path, 'root_template'))
 
@@ -136,11 +136,11 @@ class GenspiderCommandTest(CommandTest):
         assert exists(join(self.proj_mod_path, 'spiders', 'test_name.py'))
 
     def test_template(self, tplname='crawl'):
-        args = ['--template=%s' % tplname] if tplname else []
+        args = ['--templates=%s' % tplname] if tplname else []
         spname = 'test_spider'
         p = self.proc('genspider', spname, 'test.com', *args)
         out = to_native_str(retry_on_eintr(p.stdout.read))
-        self.assertIn("Created spider %r using template %r in module" % (spname, tplname), out)
+        self.assertIn("Created spider %r using templates %r in module" % (spname, tplname), out)
         self.assertTrue(exists(join(self.proj_mod_path, 'spiders', 'test_spider.py')))
         p = self.proc('genspider', spname, 'test.com', *args)
         out = to_native_str(retry_on_eintr(p.stdout.read))
