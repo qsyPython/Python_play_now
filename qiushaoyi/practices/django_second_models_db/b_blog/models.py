@@ -21,7 +21,7 @@
 # class Entry(models.Model):
 #
 #     # 在django2.0后，定义外键ForeignKey 和一对一 OneToOneField关系的时候需要加on_delete选项
-#     blog = models.ForeignKey(Blog,on_delete=models.CASCADE)
+#     b_blog = models.ForeignKey(Blog,on_delete=models.CASCADE)
 #     headline = models.CharField(max_length=255)
 #     body_text = models.TextField()
 #     pub_date = models.DateField()
@@ -74,32 +74,40 @@
 
 # =========# Django 自定义Field #=========
 
-from django.db import models
-
-class CompressedTextField(models.Model):
-    def from_db_value(self, value, expression, connection, context):
-        if not value:
-            return value
-        try:
-            return value.decode('base64').decode('bz2').decode('utf-8')
-        except Exception:
-            return value
-
-    def to_python(self,value):
-        if not value:
-            return value
-        try:
-            value.decode('base64')
-            return value
-        except Exception:
-            try:
-                return value.encode('utf-8').encode('bz2').encode('base64')
-            except Exception:
-                return value
-
-
+# from django.db import models
+#
+# class CompressedTextField(models.Model):
+#     def from_db_value(self, value, expression, connection, context):
+#         if not value:
+#             return value
+#         try:
+#             return value.decode('base64').decode('bz2').decode('utf-8')
+#         except Exception:
+#             return value
+#
+#     def to_python(self,value):
+#         if not value:
+#             return value
+#         try:
+#             value.decode('base64')
+#             return value
+#         except Exception:
+#             try:
+#                 return value.encode('utf-8').encode('bz2').encode('base64')
+#             except Exception:
+#                 return value
 
 
+# =========# Django 后台 #=========
+from  django.db import models
+class Article(models.Model):
+    title = models.CharField(u'标题',max_length=256)
+    content = models.TextField(u'内容')
+    pub_date = models.DateTimeField(u'发表时间',auto_now_add=True,editable=True)
+    update_time = models.DateField(u'更新时间',auto_now=True,null=True)
+
+    def __str__(self):
+        return self.title;
 
 
 

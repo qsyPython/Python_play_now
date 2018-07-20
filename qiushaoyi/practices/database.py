@@ -29,7 +29,7 @@
 # conn = sqlite3.connect('test_sqlite3.db')
 # cursor = conn.cursor()
 # cursor.execute('create table user(id varchar(20) primary key ,name varchar(20))')
-# cursor.execute('insert into user(id,name) values (\'1\',\'qsy\')')
+# cursor.execute('insert into user(id,name) values (\'1\',\'qsy')
 # print('获取插入的行数: ',cursor.rowcount)
 # cursor.execute('select *from user where id=? and name=?',('1','qsy'))
 # values = cursor.fetchall()

@@ -41,7 +41,7 @@ lssitepackages: 列出当前环境安装了的包
 ==========================practice 1:搭建django 项目、apps 和 数据库基本操作  ==========================
 1、获取django项目路径：cd /Users/mac/Desktop/Python_play_now/qiushaoyi/programs
 2、创建项目：django-admin startproject django_first（名称）
-3、进入项目目录: cd django_first
+3、进入项目目录: cd django_first（名称）
 4、新建app：python3 manage.py startapp app_first（名称）
 
 创建数据库表 或 更改数据库表或字段 
@@ -57,8 +57,9 @@ python3 manage.py runserver
 （# 当提示端口被占用的时候，可以用其它端口：
 python3 manage.py runserver 8001
 python3 manage.py runserver 9999
-# 监听机器所有可用ip （电脑可能有多个内网ip或多个外网ip）：
+# 监听机器所有可用的ip （电脑可能有多个内网ip或多个外网ip）：
 python3 manage.py runserver 0.0.0.0:8000）
+
 
 补充： 
     接口的工作流程：以访问web的url为例
@@ -135,7 +136,7 @@ __双下划线不合法 + python的所有关键字也不合法
 
 2、使用python3的shell操作指令(python3 manage.py shell):
 
-from people.models import Person
+from a_people.models import Person
 # 增加对象4种方式:
 1、Person.objects.create(name='我擦',age=11)
 2、p = Person(name='woca',age=12)
@@ -149,7 +150,6 @@ p.age = 18
 p.save()
 
 # 查询 对象的n种方法：
-
 Person.objects.all()
 Person.objects.all()[:10] 切片可以节约内存
 
@@ -180,7 +180,7 @@ Person.objects.all().reverse()[0] 最后1个
 # 删除：
 Person.objects.filter(name__contains='abc').delete()
 
-# 更新：
+# 改——更新：
 Persoon.objects.get(name='wocao').update(name='nima',email='1379587985@qq.com')
 Person.objects.filter(name__contains='abc).update(name='我是新name')
 
@@ -207,10 +207,10 @@ qs = qs.distinct()
 
 2、QuerySet：数据库接口shell操作：
 当有一对多，多对一，或者多对多的关系的时候，先把相关的对象查询出来
->>> from blog.models import Entry
+>>> from b_blog.models import Entry
 >>> entry = Entry.objects.get(pk=1)
 >>> cheese_blog = Blog.objects.get(name="Cheddar Talk")
->>> entry.blog = cheese_blog
+>>> entry.b_blog = cheese_blog
 >>> entry.save()
 
 
@@ -281,7 +281,30 @@ Author.objects.raw('select name from blog_author limit 1')
 
 author = authors[0]
 
+==============================Django 自定义Field==================================
 
+1. 减少文本的长度，保存数据的时候压缩，读取的时候解压缩，如果发现压缩后更长，就用原文本直接存储：
+见 compress_textfield.py
+from compress_textfield import ListField
+# 使用时：导入ListField
+class Article(models.Model):
+    labels = ListField()
+
+2.更改数据表
+python3 manage.py sql appname
+
+
+======= admin后台处理 ==========
+# 兼容python2.x和python3.x
+from __future__ import unicode_literals
+from django.utils.encoding import python_2_unicode_compatible
+@python_2_unicode_compatible
+python3的代码
+
+
+# 如何在已有的db中增删改tab 和 修改已有表内容
+因为 python3 manage.py makemigrations 和 python3 manage.py migrate是初始化操作,无法言它
+python3 manage.py dbshell
 
 
 '''
