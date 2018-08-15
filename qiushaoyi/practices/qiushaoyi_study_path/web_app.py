@@ -79,16 +79,16 @@ Python为解释型脚本语言，开发效率高，炒鸡适合web开发。
 '''
 # 见web基础开发.html
 '''
-==========================practice 3: wsgi接口使用：1个函数 对应 1个http请求 ==========================
+==========================practice 3: wsgi接口使用：1个函数 对应 1个http请求：client ==========================
 一个Web App的本质就是：
 
-浏览器发送一个HTTP请求；
+1、浏览器发送一个HTTP请求；
 
-服务器收到请求，生成一个HTML文档；
+2、服务器收到请求，生成一个HTML文档；
 
-服务器把HTML文档作为HTTP响应的Body发送给浏览器；
+3、服务器把HTML文档作为HTTP响应的Body发送给浏览器；
 
-浏览器收到HTTP响应，从HTTP Body取出HTML文档并显示。
+4、浏览器收到HTTP响应，从HTTP Body取出HTML文档并显示。
 
 wsgi简化web应用为：
 从environ这个dict对象拿到HTTP请求信息，然后构造HTML，通过start_response()发送http请求信息中的Header，最后返回Body
@@ -110,10 +110,63 @@ def application(environ, start_response):
 
 # 配合 wsgiref 服务器使用，见 wsgi_server.py文件
 '''
-==========================practice 4: 常见web框架使用 ==========================
+==========================practice 4: 常见web框架使用：flask：（Flask自带的Server在端口5000上监听） 和 django(Django：全能型Web框架) ==========================
 '''
+# from flask import Flask
+# from flask import request
+#
+# app = Flask(__name__)
+#
+# @app.route('/',methods=['GET','POST'])
+# def home():
+#     return '<h1>Home</h1>'
+#
+# @app.route('/signin',methods=['GET'])
+# def signin_form():
+#     return '''
+#     <form action="/signin" method="post">
+#               <p><input name="username"></p>
+#               <p><input name="password" type="password"></p>
+#               <p><button type="submit">Sign In</button></p>
+#               </form>
+#            '''
+#
+# @app.route('/signin',methods=['POST'])
+# def signin():# 需要从request对象读取表单内容:Flask通过request.form['name']
+#     if request.form['username'] == 'admin' and request.form['password'] == 'password':
+#         return '<h3>Hello,admin</h3>'
+#     return '<h3>Bad username or password</h3>'
+#
+# if __name__ == '__main__':
+#     app.run()
 
+# 运行起来后，执行：/signin
+'''
+==========================practice 5: 模板：本质上是 mvc优化后的 practice 4 ==========================
+注意 少 ：必须保证该 .py文件 的同级有文件夹：templates
+mvc设计模式作用：实现了 分离了Python代码 和 HTML代码
+'''
+from flask import Flask
+from flask import request,render_template
 
-'''
-==========================practice 5: 模板 ==========================
-'''
+app = Flask(__name__)
+
+@app.route('/',methods=['GET','POST'])
+def home():
+    return render_template('web_home.html')
+
+@app.route('/signin',methods=['GET'])
+def sign_form():
+    return render_template('web_signin_form.html')
+
+@app.route('/signin',methods=['POST'])
+def sign_commit():
+    username = request.form['username']
+    password = request.form['password']
+    if username == 'admin' and password == 'password':
+        return render_template('web_signin_successs.html',username=username)
+
+    return render_template('web_signin_form.html',message='Bad username or password',username=username)
+
+if __name__ == '__main__':
+    app.run()
