@@ -351,10 +351,10 @@ python3中为http.cookies模块
 # -*- coding: UTF-8 -*-
 
 # HTTP 头部
-print ("Content-Disposition: attachment; filename=\"qsy_foo.txt\"")
-
-with open("foo.txt", "rb",newline='') as f:
-     print (f.read())
+# print ("Content-Disposition: attachment; filename=\"qsy_foo.txt\"")
+#
+# with open("foo.txt", "rb",newline='') as f:
+#      print (f.read())
 
 
 
