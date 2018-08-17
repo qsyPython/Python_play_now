@@ -58,6 +58,9 @@ yield：暂停当前函数执行，切回到原函数执行
 '''
 ==========================practice 3: asyncio：单线程的IO：基本使用 ==========================
 异步IO：单线程中的处理方式！！！
+async 定义一个协程。
+await 用于挂起阻塞的异步调用接口
+task: 则是对协程对象进一步封装
 '''
 # A、tasks为重复的某任务（函数）：几乎是同步执行
 # import asyncio,threading
@@ -125,28 +128,31 @@ asyncio:实现单线程并发IO操作，常用于客户端
 
 '''
 ==========================practice 5: aiohttp: 基于asyncio实现的HTTP框架 ==========================
+# async修饰后: 调用该init不会立即执行函数，而是会返回一个协程函对象（就是一个原生可以挂起的函数）。
+# 需要执行run_until_complete把该协程对象加到消息循环，等待被调用
+
 '''
-import asyncio
-
-from aiohttp import web
-
-async def index(request):
-    await asyncio.sleep(0.5)
-    return web.Response(body=b'<h1>Index</h1>')
-
-async def hello(request):
-    await asyncio.sleep(0.5)
-    text = '<h1>hello, %s!</h1>' % request.match_info['name']
-    return web.Response(body=text.encode('utf-8'))
-
-async def init(loop):
-    app = web.Application(loop=loop)
-    app.router.add_route('GET', '/', index)
-    app.router.add_route('GET', '/hello/{name}', hello)
-    srv = await loop.create_server(app.make_handler(), '127.0.0.1', 8000)
-    print('Server started at http://127.0.0.1:8000...')
-    return srv
-
-loop = asyncio.get_event_loop()
-loop.run_until_complete(init(loop))
-loop.run_forever()
+# import asyncio
+#
+# from aiohttp import web
+#
+# async def index(request):
+#     await asyncio.sleep(0.5)
+#     return web.Response(body=b'<h1>Index</h1>')
+#
+# async def hello(request):
+#     await asyncio.sleep(0.5)
+#     text = '<h1>hello, %s!</h1>' % request.match_info['name']
+#     return web.Response(body=text.encode('utf-8'))
+#
+# async def init(loop):
+#     app = web.Application(loop=loop)
+#     app.router.add_route('GET', '/', index)
+#     app.router.add_route('GET', '/hello/{name}', hello)
+#     srv = await loop.create_server(app.make_handler(), '127.0.0.1', 8000)
+#     print('Server started at http://127.0.0.1:8000...')
+#     return srv
+#
+# loop = asyncio.get_event_loop()
+# loop.run_until_complete(init(loop))
+# loop.run_forever()

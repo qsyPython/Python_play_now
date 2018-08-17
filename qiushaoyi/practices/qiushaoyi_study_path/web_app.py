@@ -38,7 +38,7 @@ Python为解释型脚本语言，开发效率高，炒鸡适合web开发。
 #
 # 域名：由Host头指定：Host: www.sina.com.cn
 #
-# 以及其他相关的Header；
+# 以及其他相关的Header:包括；
 #
 # 如果是POST，那么请求还包括一个可选的Body，包含用户数据。
 #
