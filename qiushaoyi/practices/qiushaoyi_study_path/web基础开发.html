@@ -1,0 +1,26 @@
+<!-- html、css、js的简单使用 -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>你好</title>
+    <style>
+        h1 {
+            color: #333333;
+            font-size: 48px;
+            text-shadow: 3px 3px 3px #666666;
+        }
+    </style>
+    <script>
+        function change() {
+            document.getElementsByTagName('h1')[0].style.color = '#ff0000';
+            document.getElementById('123').style.color = '#301cff';
+        }
+    </script>
+</head>
+<body>
+<h1 id="123" onclick="change()">
+    Hello,World!
+</h1>
+</body>
+</html>

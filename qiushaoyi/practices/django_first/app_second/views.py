@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 
-def add(request):
+def add(request): # get请求后返回的数据
     a = request.GET['a']
     b = request.GET['b']
     c = int(a) + int(b)

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>web_signin_form</title>
+</head>
+<body>
+<!--这就是 model:{{ message }}、{{ username }}都表示该dict中的getter方法；而setter是在py文件中-->
+{% if message %}
+<p style="color: red"> {{ message }}</p>
+{% endif %}
+<!--这就是 model-->
+
+<form action="/signin" method="post">
+    <legend> Please sign in:</legend>
+    <p>
+        UserName: <input  name="username" placeholder="Username" value="{{ username }}">
+    </p>
+    <p>
+        Password:  <input name="password" placeholder="Password" type="password">
+    </p>
+    <p>
+        <button type="submit"> 登陆</button>
+    </p>
+
+</form>
+</body>
+</html>
