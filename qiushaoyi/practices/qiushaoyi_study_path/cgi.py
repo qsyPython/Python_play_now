@@ -40,7 +40,7 @@
 '''
 # !/usr/bin/python
 # -*- coding: UTF-8 -*-
-# filename:test.py
+# filename:test_0.py
 
 # import os
 #
@@ -56,17 +56,17 @@
 
 # !/usr/bin/python
 # -*- coding: UTF-8 -*-
-# filename:test.py
+# filename:test_0.py
 # CGI 处理模块
 import cgi, cgitb
 
 '''
 ======================practice 3: 简单的url实例：GET方法:结合cgi_get.html跳转 ==========================
 '''
-# # 服务器路径/cgi-bin/test.py?name=少测下教程一&url=http://www.baidu.com
+# # 服务器路径/cgi-bin/test_0.py?name=少测下教程一&url=http://www.baidu.com
 # #!/usr/bin/python
 # # -*- coding: UTF-8 -*-
-# #filename:test.py
+# #filename:test_0.py
 #
 # #CGI处理模块
 # import cgi,cgitb

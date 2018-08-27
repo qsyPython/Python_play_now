@@ -42,7 +42,7 @@
 
 '''
 ==========================practice 2: mysql ==========================
-本机安装mysql后，再安装MySQL驱动：
+需本机安装mysql后，再安装MySQL驱动：
 pip3 install mysql-connector-python --allow-external mysql-connector-python 
 或者 pip3 install mysql-connector
 
@@ -181,6 +181,7 @@ ORM框架的作用就是把数据库表的一行记录与一个对象互相做�
 '''
 ==========================practice 4: PyMySQL：py可用的mysql ==========================
 pip3 install Pymysql
+手动创建该数据库：local_python_mysql
 '''
 
 import pymysql
