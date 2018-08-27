@@ -4,7 +4,7 @@
 
 import re,time,json,logging,hashlib,base64,asyncio
 from aiohttp import web
-from apis import APIError, APIValueError, APIResourceNotFoundError
+from apis import APIError, APIValueError,APIPermissionError,APIResourceNotFoundError
 from coroweb import get,post
 from models import User,Comment,Blog,next_id
 from config  import configs
@@ -130,7 +130,6 @@ async def api_get_users():
         u.passwd = '******'
     return dict(users=users)
 
-
 _RE_EMAIL = re.compile(r'^[a-z0-9\.\-\_]+\@[a-z0-9\-\_]+(\.[a-z0-9\-\_]+){1,4}$')
 _RE_SHA1 = re.compile(r'^[0-9a-f]{40}$')
 
@@ -169,6 +168,42 @@ async def api_register_user(*, email, name, passwd):
     return r
 
 
+
+# 路由：创建日志页
+def check_admin(request):
+    if request.__user__ is None or not request.__user__.admin:
+        raise APIPermissionError()
+
+def get_page_index(page_str):
+    p = 1
+    try:
+        p = int(page_str)
+    except ValueError as e:
+        pass
+    if p < 1:
+        p = 1
+    return p
+
+@get('/api/blogs/{id}')
+async def api_get_blog(*,id):
+    blog = await Blog.find(id)
+    return blog
+
+@post('/api/blogs')
+async def api_create_blog(request,*,name,summary,content):
+    check_admin(request)
+    if not name or not name.strip():
+        raise APIValueError('name', 'name cannot be empty.')
+    if not summary or not summary.strip():
+        raise APIValueError('summary', 'summary cannot be empty.')
+    if not content or not content.strip():
+        raise APIValueError('content', 'content cannot be empty.')
+
+    blog = Blog(user_id = request.__user__.id,user_name=request.__user__.name, \
+                user_image=request.__user__.image,\
+                name=name.strip(),summary=summary.strip(), content=content.strip())
+    await blog.save()
+    return blog
 # orm后操作db：
 # user=User(id="100001",name="Andy",password="*****")
 # user.save()  //保存到数据库

@@ -5,6 +5,59 @@ JSON API Definition
 
 import json,logging,inspect,functools
 
+class Page(object):
+    '''
+    Page object for display pages.
+    '''
+    def __init__(self,item_counts,page_index=1,page_size=10):
+        '''
+        :param item_counts: 总日志数
+        :param page_index: 当前页数
+        :param page_size: 每1页的个数
+        Init Pagination by item_count, page_index and page_size.
+        >>> p1 = Page(100, 1)
+        >>> p1.page_count
+        10
+        >>> p1.offset
+        0
+        >>> p1.limit
+        10
+        >>> p2 = Page(90, 9, 10)
+        >>> p2.page_count
+        9
+        >>> p2.offset
+        80
+        >>> p2.limit
+        10
+        >>> p3 = Page(91, 10, 10)
+        >>> p3.page_count
+        10
+        >>> p3.offset
+        90
+        >>> p3.limi
+        '''
+        self.item_counts = item_counts
+        self.page_size = page_size
+        self.page_count = item_counts // page_size +(1 if item_counts%page_size>0 else 0)
+        if item_counts == 0 or page_index > self.page_count:#无数据 或 仅1页数据
+            self.offset = 0
+            self.limit = 0
+            self.page_index = 1
+        else:
+            self.offset = self.page_size * (page_index-1)
+            self.limit = self.page_size
+            self.page_index = page_index
+
+        self.has_next = self.page_index < self.page_count
+        self.has_previous = self.page_index>1
+
+    def __str__(self):
+        return 'item_count:%s,page_count:%s,page_index:%s,' \
+               'page_size:%s,offset:%s,limit: %s'%(self.item_count,\
+                self.page_count, self.page_index, self.page_size, self.offset, self.limit)
+
+    __repr__ = __str__
+
 class APIError(Exception):
     '''
         the base APIError which contains:
@@ -38,3 +91,7 @@ class APIPermissionError(APIError):
     '''
     def __init__(self, message=''):
         super(APIPermissionError, self).__init__('permission:forbidden', 'permission', message)
+
+if __name__=='__main__':
+    import doctest
+    doctest.testmod()
