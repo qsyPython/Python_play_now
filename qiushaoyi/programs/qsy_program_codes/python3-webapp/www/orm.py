@@ -20,11 +20,11 @@ def log(sql,args=()):
 
 # 连接池（相当于：缓存池）：每个http请求，从连接池中直接获取数据库连接；
 # 好处：不用频繁打开和关闭数据库，尽量复用！！
-
-async def create_pool(loop,**kw): #kw包括:user、password、db
+@asyncio.coroutine
+def create_pool(loop,**kw): #kw包括:user、password、db
     logging.info('create database connection pool...')
     global __pool
-    __pool = await aiomysql.create_pool(
+    __pool = yield from aiomysql.create_pool(
         host = kw.get('host','localhost'),
         port = kw.get('port',3306),
         user=kw['user'],
@@ -41,71 +41,79 @@ async def create_pool(loop,**kw): #kw包括:user、password、db
 # 参数：传入SQL语句和SQL参数、size
 # 若size有值，fetchmnay获取最多指定数量的记录；若没有，fetchall获取所有记录。
 # 返回值：cursor对象返回结果集
-async def select(sql,args,size=None):
-    log(sql,args)
+@asyncio.coroutine
+def select(sql, args, size=None):
+    log(sql, args)
     global __pool
-    async with __pool.get() as conn:
-        async with conn.cursor(aiomysql.DictCursor) as cur:
-            await cur.execute(sql.replace('?','%s'),args or ())# SQL语句的占位符是?，而MySQL的占位符是%s
-            if size:
-                rs = await cur.fetchmnay(size)
-            else:
-                rs = await cur.fetchall()
+    with (yield from __pool) as conn:
+        cur = yield from conn.cursor(aiomysql.DictCursor)
+        yield from cur.execute(sql.replace('?', '%s'), args or ())
+        if size:
+            rs = yield from cur.fetchmany(size)
+        else:
+            rs = yield from cur.fetchall()
+        yield from cur.close()
         logging.info('rows returned: %s' % len(rs))
         return rs
-
 
 # 要执行INSERT、UPDATE、DELETE语句，可以定义一个通用的execute()函数：前3种语句的参数和返回值都一致
 # 参数：sql,args,autocommit
 # 返回值：cursor对象通过rowcount返回结果数
-async  def execute(sql,args,autocommit=True):
+@asyncio.coroutine
+def execute(sql, args, autocommit=True):
     log(sql)
-    async with __pool.get() as conn:
+    with (yield from __pool) as conn:
         if not autocommit:
-            await conn.begin()
+            yield from conn.begin()
         try:
-            async with conn.cursor(aiomysql.DictCursor) as cur:
-                await cur.execute(sql.replace('?','%s'),args)
-                affected = cur.rowcount
+            cur = yield from conn.cursor()
+            yield from cur.execute(sql.replace('?', '%s'), args)
+            affected = cur.rowcount
+            yield from cur.close()
             if not autocommit:
-                await conn.commit()
+                yield from conn.commit()
         except BaseException as e:
             if not autocommit:
-                await conn.rollback()
+                yield from conn.rollback()
             raise
         return affected
 
 #数据库中 不同列对应 的数据映射的类型
 class Field(object):
-    def __init__(self,name,column_type,primary_key,default):
+
+    def __init__(self, name, column_type, primary_key, default):
         self.name = name
         self.column_type = column_type
         self.primary_key = primary_key
         self.default = default
+
     def __str__(self):
-        return '<%s, %s:%s>'%(self.__class__.__name__,self.column_type,self.name)
+        return '<%s, %s:%s>' % (self.__class__.__name__, self.column_type, self.name)
 
 class StringField(Field):
-    def __init__(self,name=None,primary_key=False, default=None,ddl='varchar(100)'):
-        super().__init__(name,ddl,primary_key,default)
+
+    def __init__(self, name=None, primary_key=False, default=None, ddl='varchar(100)'):
+        super().__init__(name, ddl, primary_key, default)
 
 class BooleanField(Field):
-    def __init__(self,name=None,default=False):
-        super().__init__(name,'boolean',False,default)
 
+    def __init__(self, name=None, default=False):
+        super().__init__(name, 'boolean', False, default)
 
 class IntegerField(Field):
+
     def __init__(self, name=None, primary_key=False, default=0):
-        super().__init__(name,'bigint',primary_key,default)
+        super().__init__(name, 'bigint', primary_key, default)
 
 class FloatField(Field):
+
     def __init__(self, name=None, primary_key=False, default=0.0):
         super().__init__(name, 'real', primary_key, default)
 
 class TextField(Field):
+
     def __init__(self, name=None, default=None):
         super().__init__(name, 'text', False, default)
-
 
 # 设计的话：建立class(含有 不同的各种类属性) 和 数各据库的表（键值对）映射
 def create_args_string(num):
@@ -116,49 +124,39 @@ def create_args_string(num):
 
 class ModelMetaclass(type):
 
-    def __new__(cls, name,bases,attrs):
-        # 1、排除掉对Model类的修改
-        if name == 'Model':
-            return type.__new__(cls,name,bases,attrs)
-
-        tableName = attrs.get('__table__',None) or name
-        logging.info('found model:%s(table:%s)' % (name,tableName))
-        # 2、在当前类（比如User）中查找定义的类的所有属性，如果找到一个Field属性，就把它保存到一个__mappings__的dict中
-        # 同时从类属性中删除该Field属性，否则，容易造成运行时错误（实例的属性会遮盖类的同名属性）；
+    def __new__(cls, name, bases, attrs):
+        if name=='Model':
+            return type.__new__(cls, name, bases, attrs)
+        tableName = attrs.get('__table__', None) or name
+        logging.info('found model: %s (table: %s)' % (name, tableName))
         mappings = dict()
         fields = []
         primaryKey = None
         for k, v in attrs.items():
             if isinstance(v, Field):
-                logging.info(' found mapping:%s===>%s' % (k,v))
-                mappings[k]= v
-                if v.primary_key: # 找到主键
+                logging.info('  found mapping: %s ==> %s' % (k, v))
+                mappings[k] = v
+                if v.primary_key:
+                    # 找到主键:
                     if primaryKey:
                         raise BaseException('Duplicate primary key for field: %s' % k)
                     primaryKey = k
-                else: # 若没找到主键
+                else:
                     fields.append(k)
         if not primaryKey:
             raise BaseException('Primary key not found.')
-
         for k in mappings.keys():
             attrs.pop(k)
-
-        # 3、把表名、mappings和sql语句绑定到attrs中
-        escaped_fields = list(map(lambda f:'`%s`' % f,fields))
-        attrs['__mappings__'] = mappings  # 保存属性和列的映射关系
+        escaped_fields = list(map(lambda f: '`%s`' % f, fields))
+        attrs['__mappings__'] = mappings # 保存属性和列的映射关系
         attrs['__table__'] = tableName
-        attrs['__primary_key__'] = primaryKey  # 主键属性名
-        attrs['__fields__'] = fields  # 除主键外的属性名
-        # attrs['__create_tab_'] = 'create table %s(%s varchar(20) primary key ,name varchar(20))' % tableName
+        attrs['__primary_key__'] = primaryKey # 主键属性名
+        attrs['__fields__'] = fields # 除主键外的属性名
         attrs['__select__'] = 'select `%s`, %s from `%s`' % (primaryKey, ', '.join(escaped_fields), tableName)
-        attrs['__insert__'] = 'insert into `%s` (%s, `%s`) values (%s)' % (
-        tableName, ', '.join(escaped_fields), primaryKey, create_args_string(len(escaped_fields) + 1))
-        attrs['__update__'] = 'update `%s` set %s where `%s`=?' % (
-        tableName, ', '.join(map(lambda f: '`%s`=?' % (mappings.get(f).name or f), fields)), primaryKey)
+        attrs['__insert__'] = 'insert into `%s` (%s, `%s`) values (%s)' % (tableName, ', '.join(escaped_fields), primaryKey, create_args_string(len(escaped_fields) + 1))
+        attrs['__update__'] = 'update `%s` set %s where `%s`=?' % (tableName, ', '.join(map(lambda f: '`%s`=?' % (mappings.get(f).name or f), fields)), primaryKey)
         attrs['__delete__'] = 'delete from `%s` where `%s`=?' % (tableName, primaryKey)
-        return type.__new__(cls,name,bases,attrs)
-
+        return type.__new__(cls, name, bases, attrs)
 
 class Model(dict, metaclass=ModelMetaclass):
 
@@ -188,7 +186,8 @@ class Model(dict, metaclass=ModelMetaclass):
         return value
 
     @classmethod
-    async def findAll(cls, where=None, args=None, **kw):# 查询所有数据
+    @asyncio.coroutine
+    def findAll(cls, where=None, args=None, **kw):
         ' find objects by where clause. '
         sql = [cls.__select__]
         if where:
@@ -211,52 +210,51 @@ class Model(dict, metaclass=ModelMetaclass):
                 args.extend(limit)
             else:
                 raise ValueError('Invalid limit value: %s' % str(limit))
-        rs = await select(' '.join(sql), args)
+        rs = yield from select(' '.join(sql), args)
         return [cls(**r) for r in rs]
 
     @classmethod
-    async def findNumber(cls, selectField, where=None, args=None):# 根据序列号
+    @asyncio.coroutine
+    def findNumber(cls, selectField, where=None, args=None):
         ' find number by select and where. '
         sql = ['select %s _num_ from `%s`' % (selectField, cls.__table__)]
         if where:
             sql.append('where')
             sql.append(where)
-        rs = await select(' '.join(sql), args, 1)
+        rs = yield from select(' '.join(sql), args, 1)
         if len(rs) == 0:
             return None
         return rs[0]['_num_']
 
     @classmethod
-    async def find(cls, pk):#查询
+    @asyncio.coroutine
+    def find(cls, pk):
         ' find object by primary key. '
-        rs = await select('%s where `%s`=?' % (cls.__select__, cls.__primary_key__), [pk], 1)
+        rs = yield from select('%s where `%s`=?' % (cls.__select__, cls.__primary_key__), [pk], 1)
         if len(rs) == 0:
             return None
         return cls(**rs[0])
 
-    async def save(self):# 插入
+    @asyncio.coroutine
+    def save(self):
         args = list(map(self.getValueOrDefault, self.__fields__))
         args.append(self.getValueOrDefault(self.__primary_key__))
-        rows = await execute(self.__insert__, args)
+        rows = yield from execute(self.__insert__, args)
         if rows != 1:
             logging.warning('failed to insert record: affected rows: %s' % rows)
 
-    async def update(self):# 更新
+    @asyncio.coroutine
+    def update(self):
         args = list(map(self.getValue, self.__fields__))
         args.append(self.getValue(self.__primary_key__))
-        rows = await execute(self.__update__, args)
+        rows = yield from execute(self.__update__, args)
         if rows != 1:
             logging.warning('failed to update by primary key: affected rows: %s' % rows)
 
-    async def remove(self):# 删除
+    @asyncio.coroutine
+    def remove(self):
         args = [self.getValue(self.__primary_key__)]
-        rows = await execute(self.__delete__, args)
+        rows = yield from execute(self.__delete__, args)
         if rows != 1:
             logging.warning('failed to remove by primary key: affected rows: %s' % rows)
-
-
-
-
-
-
 

@@ -77,7 +77,7 @@ MySQL服务器独立运行，需要支持Python的MySQL驱动来连接到MySQL�
 #
 # cursor = conn.cursor()
 # # 执行查询sql语句
-# cursor.execute('select *from user where id= %s and name= %s',['1','我就是本地sql1'])
+# cursor.execute('select * from user where id= %s and name= %s',['1','我就是本地sql1'])
 # values = cursor.fetchall()
 # print('查询到游标的数据: ',values)
 # cursor.close()

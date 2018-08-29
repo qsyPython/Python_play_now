@@ -1,27 +1,29 @@
 
 # ======🙋🙋🙋实现了 1个函数fn 映射 为1个URL处理函数！！！
+import asyncio, os, inspect, logging, functools
 
-import asyncio,os,inspect,logging,functools
 from urllib import parse
-from aiohttp import web,web_runner
-from apis import  APIError
+
+from aiohttp import web
+
+from apis import APIError
 
 def get(path):
     '''
-        Define decorator @get('/path')
+    Define decorator @get('/path')
     '''
     def decorator(func):
         @functools.wraps(func)
         def wrapper(*args, **kw):
             return func(*args, **kw)
-        wrapper.__method__='GET'
+        wrapper.__method__ = 'GET'
         wrapper.__route__ = path
         return wrapper
     return decorator
 
 def post(path):
     '''
-        Define decorator @post('/path')
+    Define decorator @post('/path')
     '''
     def decorator(func):
         @functools.wraps(func)
@@ -72,10 +74,6 @@ def has_request_arg(fn):
             raise ValueError('request parameter must be the last named parameter in function: %s%s' % (fn.__name__, str(sig)))
     return found
 
-# 封装一个请求工具：
-# RequestHandler目的就是从URL函数中分析其需要接收的参数，从request中获取必要的参数，
-# 调用URL函数，然后把结果转换为web.Response对象
-# 这完全符合aiohttp框架的要求
 class RequestHandler(object):
 
     def __init__(self, app, fn):
@@ -87,7 +85,8 @@ class RequestHandler(object):
         self._named_kw_args = get_named_kw_args(fn)
         self._required_kw_args = get_required_kw_args(fn)
 
-    async def __call__(self, request):
+    @asyncio.coroutine
+    def __call__(self, request):
         kw = None
         if self._has_var_kw_arg or self._has_named_kw_args or self._required_kw_args:
             if request.method == 'POST':
@@ -95,12 +94,12 @@ class RequestHandler(object):
                     return web.HTTPBadRequest('Missing Content-Type.')
                 ct = request.content_type.lower()
                 if ct.startswith('application/json'):
-                    params = await request.json()
+                    params = yield from request.json()
                     if not isinstance(params, dict):
                         return web.HTTPBadRequest('JSON body must be object.')
                     kw = params
                 elif ct.startswith('application/x-www-form-urlencoded') or ct.startswith('multipart/form-data'):
-                    params = await request.post()
+                    params = yield from request.post()
                     kw = dict(**params)
                 else:
                     return web.HTTPBadRequest('Unsupported Content-Type: %s' % request.content_type)
@@ -134,7 +133,7 @@ class RequestHandler(object):
                     return web.HTTPBadRequest('Missing argument: %s' % name)
         logging.info('call with args: %s' % str(kw))
         try:
-            r = await self._func(**kw)
+            r = yield from self._func(**kw)
             return r
         except APIError as e:
             return dict(error=e.error, data=e.data, message=e.message)
@@ -144,7 +143,6 @@ def add_static(app):
     app.router.add_static('/static/', path)
     logging.info('add static %s => %s' % ('/static/', path))
 
-# 注册一个URL处理函数：
 def add_route(app, fn):
     method = getattr(fn, '__method__', None)
     path = getattr(fn, '__route__', None)
@@ -155,7 +153,6 @@ def add_route(app, fn):
     logging.info('add route %s %s => %s(%s)' % (method, path, fn.__name__, ', '.join(inspect.signature(fn).parameters.keys())))
     app.router.add_route(method, path, RequestHandler(app, fn))
 
-# 自动扫描把handler模块的所有符合条件的函数注册：
 def add_routes(app, module_name):
     n = module_name.rfind('.')
     if n == (-1):
@@ -172,6 +169,3 @@ def add_routes(app, module_name):
             path = getattr(fn, '__route__', None)
             if method and path:
                 add_route(app, fn)
-
-
-

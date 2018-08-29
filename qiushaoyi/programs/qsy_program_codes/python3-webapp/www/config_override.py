@@ -5,6 +5,6 @@
 
 configs = {
     'db':{
-        'host':'127.0.0.1' #修正host
+        'host':'127.0.0.1' # 修正host
     }
 }

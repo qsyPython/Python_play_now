@@ -1,3 +1,4 @@
+
 import config_default
 
 class Dict(dict):
@@ -31,10 +32,10 @@ def merge(defaults, override):
     return r
 
 def toDict(d):
-    dt = Dict()
+    D = Dict()
     for k, v in d.items():
-        dt[k] = toDict(v) if isinstance(v, dict) else v
-    return dt
+        D[k] = toDict(v) if isinstance(v, dict) else v
+    return D
 
 configs = config_default.configs
 

@@ -4,8 +4,9 @@
 '''
 
 configs = {
+    'debug':True,
     'db': {
-        'host':'123.0.0.1',
+        'host':'www.baidu.com',
         'port':3306,
         'user':'root',
         'password':'qsy112933',
