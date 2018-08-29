@@ -22,9 +22,9 @@
 
     （实际开发：不这么操作）🙋解决方案：采用直接读取cookie的方式来验证用户登录，每次用户访问任意URL，都会对cookie进行验证。保证服务器处理任意的URL：都是无状态的，可以扩展到多台服务器。
 
-    编写日志：Vue这个MVVM框架来实现创建Blog的页面templates/manage_blog_edit.html；维护成本
-    提升开发效率
-    完成web app
+    编写日志：Vue这个MVVM框架：来实现创建Blog的页面 和 页面分页，维护成本变得更低
+    提升开发效率：
+    完成web app：
     部署 web开发服务器
     编写移动app
 
