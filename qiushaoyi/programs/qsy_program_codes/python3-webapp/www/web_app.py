@@ -2,30 +2,39 @@
 	作者：邱少一
 	日期：2018/03/06
 	1、准备：
+
 	python版本：python3 --version
-	选择的Web框架：异步的框架aiohttp：pip3 install aiohttp(比较底层，需要再次封装)
+	选择Web异步的框架aiohttp：pip3 install aiohttp(比较底层，需要再次封装)
 	前端模板引擎jinja2：pip3 install jinja2
 	MySQL的Python异步驱动程序aiomysql：pip3 install aiomysql
+	监控目录文件变化：pip3 install watchdog
+
 
 	2、流程：
-	编写web 骨架
-	编写ORM 和 Model
-	编写 web框架（基于aiohttp）
-	编写配置文件
-	编写MVC
-	构建前端
-	编写API（返回的是机器可解析的数据，而不是HTML 的URL这样的就是API）：如果一个URL返回的不是HTML，而是机器能直接解析的数据，这个URL就可以看成是一个Web API
-    用户注册登陆：（ 用户口令是客户端传递的经过SHA1计算后的40位Hash字符串，所以服务器端并不知道用户的原始口令；
+	1、编写web 骨架
+	2、编写ORM 和 Model
+	3、编写 web框架（基于aiohttp）
+	4、编写配置文件
+	5、编写MVC
+	6、构建前端
+	7、编写API（返回的是机器可解析的数据，而不是HTML 的URL这样的就是API）：如果一个URL返回的不是HTML，而是机器能直接解析的数据，这个URL就可以看成是一个Web API
+    8、用户注册登陆：（ 用户口令是客户端传递的经过SHA1计算后的40位Hash字符串，所以服务器端并不知道用户的原始口令；
     服务器要跟踪web用户的登陆状态，只能通过客户端cookie实现，web端保存在Session中。。。
     Session的优点可直接读取，缺点是服务器需要在内存中维护：1个映射表，来存储用户登录信息，
     问题是，多台服务器时，需要Session做集群，另1个服务器为Redis：存储各个服务器中的Session，然后对通过Redis和服务端进行交互 ）
 
     （实际开发：不这么操作）🙋解决方案：采用直接读取cookie的方式来验证用户登录，每次用户访问任意URL，都会对cookie进行验证。保证服务器处理任意的URL：都是无状态的，可以扩展到多台服务器。
 
-    编写日志：Vue这个MVVM框架：来实现创建Blog的页面 和 页面分页，维护成本变得更低
-    提升开发效率：
-    完成web app：
-    部署 web开发服务器
+    9、编写日志：Vue这个MVVM框架：来实现创建Blog的页面 和 页面分页，维护成本变得更低
+
+    10、提升开发效率：django 可以在debug模式下自动重新加载，保证开发过程中同步性；
+    我们没有django处理上，我们解决方案：检测www目录下的代码改动，一旦有改动，就自动重启服务器。
+    编写一个辅助程序pymonitor.py
+    功能：1、检测www目录下的代码改动  2、把当前wsgiapp.py进程杀掉  3、重启服务
+    最终实现了： Debug模式的自动重新加载
+
+    11、完成web app：
+    12、部署 web开发服务器
     编写移动app
 
 
@@ -59,7 +68,7 @@ await： 用于挂起阻塞的异步调用接口 ！！！ 等效于 yield from
 
 import logging;logging.basicConfig(level=logging.INFO)
 
-import asyncio, os, json, time,socket
+import asyncio, os, json, time
 from datetime import datetime
 
 from aiohttp import web,web_runner
@@ -75,8 +84,8 @@ from handlers import cookie2user, COOKIE_NAME
 
 '''
 ========================== 0:初始化前端模板  ==========================
+app的模板 绑定为env
 '''
-
 def init_jinja2(app, **kw):
     logging.info('init jinja2...')
     options = dict(
@@ -89,7 +98,8 @@ def init_jinja2(app, **kw):
     )
     path = kw.get('path', None)
     if path is None:
-        path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates')
+        BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+        path = os.path.join(BASE_DIR, 'templates')
     logging.info('set jinja2 template path: %s' % path)
     env = Environment(loader=FileSystemLoader(path), **options)
     filters = kw.get('filters', None)
@@ -102,7 +112,7 @@ def init_jinja2(app, **kw):
 def logger_factory(app, handler):
     @asyncio.coroutine
     def logger(request):
-        logging.info('Request: %s %s' % (request.method, request.path))
+        logging.info('logger_factory -> Request: %s %s' % (request.method, request.path))
         # yield from asyncio.sleep(0.3)
         return (yield from handler(request))
     return logger
@@ -140,6 +150,7 @@ def data_factory(app, handler):
         return (yield from handler(request))
     return parse_data
 
+# 获取请求体
 @asyncio.coroutine
 def response_factory(app, handler):
     @asyncio.coroutine
@@ -156,9 +167,10 @@ def response_factory(app, handler):
             if r.startswith('redirect:'):
                 return web.HTTPFound(r[9:])
             resp = web.Response(body=r.encode('utf-8'))
-            resp.content_type = 'text/html;charset=utf-8'
+            resp.content_type = 'text/html'
+            resp.charset = 'utf-8'
             return resp
-        if isinstance(r, dict):
+        if isinstance(r, dict): # 模板的请求返回内容
             template = r.get('__template__')
             if template is None:
                 resp = web.Response(body=json.dumps(r, ensure_ascii=False, default=lambda o: o.__dict__).encode('utf-8'))
@@ -169,8 +181,8 @@ def response_factory(app, handler):
                 resp = web.Response(body=app['__templating__'].get_template(template).render(**r).encode('utf-8'))
                 resp.content_type = 'text/html;charset=utf-8'
                 return resp
-        if isinstance(r, int) and t >= 100 and t < 600:
-            return web.Response(t)
+        if isinstance(r, int) and r >= 100 and r < 600:
+            return web.Response(r)
         if isinstance(r, tuple) and len(r) == 2:
             t, m = r
             if isinstance(t, int) and t >= 100 and t < 600:
@@ -238,7 +250,7 @@ def init(loop):
     app.router.add_route('GET','/testIndex',index)
     app.router.add_route('GET','/testHello',hello)
 
-    # 初始化模板引擎
+    # 初始化模板引擎：绑定了block 和
     init_jinja2(app,filters=dict(datetime=datetime_filter))
     # 给web app添加路由，统一放在handlers模块中处理
     add_routes(app,'handlers')
