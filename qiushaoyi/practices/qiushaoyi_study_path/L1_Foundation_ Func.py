@@ -221,7 +221,7 @@ add_end1()
 print(add_end1())  # ['End']
 
 
-# 可变参数：解决了上面所说传递的参数是可变的list的问题。  通过 *list 方式作为参数来从传递
+# 可变参数:形参是tuple，不是list：解决了上面所说传递的参数是可变的list的问题。  通过 *list 方式作为参数来从传递
 # 本质上：可变参数允许你传入0个或任意个参数，这些可变参数在函数调用时自动组装为一个tuple
 def calc(*numbers):
     sum = 0
@@ -233,7 +233,7 @@ def calc(*numbers):
 calc(1, 2, 3)  # 14
 calc()  # 0
 nums = [1, 2, 3]
-calc(*nums)  # 14 *nums表示把nums这个list的所有元素作为可变参数传进去
+calc(*nums)  # 14 *nums表示把nums这个list的所有元素作为tuple可变参数传进去
 
 
 # 关键字参数：解决了上面所说传递参数是可变的dict的问题 。 通过 **dict 方式作为参数来从传递

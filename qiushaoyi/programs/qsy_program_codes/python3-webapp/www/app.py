@@ -32,10 +32,25 @@
     编写一个辅助程序pymonitor.py
     功能：1、检测www目录下的代码改动  2、把当前wsgiapp.py进程杀掉  3、重启服务
     最终实现了： Debug模式的自动重新加载
+    操作：
+    先执行:python3 pymonitor.py wsgiapp.py（未部署到远程服务器中，可先不用wsgiapp.py）
+    再执行:./pymonitor.py app.py
 
-    11、完成web app：
-    12、部署 web开发服务器
-    编写移动app
+    11、完成web app：高效开发先执行：python3 pymonitor.py 再执行./pymonitor.py app.py
+
+    12、部署web开发服务器：截至到现在，已经在本地服务器。
+    但不够，我们需要将app部署到远程服务器上：项目+数据库都部署上去！
+    1、确保ssh启动
+    2、服务端确定项目目录结构：新增版本控制的机制，linux的软连接，让项目目录指向不同版本就可以。
+       Nginx和python代码的配置文件只需要指向www目录
+    3、总结下用到的服务：
+    Nginx：高性能Web服务器+负责反向代理；
+
+    Supervisor：监控服务进程的工具；
+
+    MySQL：数据库服务。
+
+    13、编写移动app：编写app，再调用API:/api/blogs 接口即可
 
 
 
@@ -247,8 +262,8 @@ def init(loop):
     # 适配python3.0
     app = web_runner.AppRunner(app=app).app
     # 手动添加路由:
-    app.router.add_route('GET','/testIndex',index)
-    app.router.add_route('GET','/testHello',hello)
+    # app.router.add_route('GET','/testIndex',index)
+    # app.router.add_route('GET','/testHello',hello)
 
     # 初始化模板引擎：绑定了block 和
     init_jinja2(app,filters=dict(datetime=datetime_filter))
