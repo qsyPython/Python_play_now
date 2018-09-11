@@ -275,7 +275,9 @@ def init(loop):
     logging.info('server before...')
 
     # 创建1个服务器对象
-    host = '127.0.0.1'
+    # 'localhost' == '127.0.0.1' 该地址已经被Apache服务器使用
+    # 故使用10.9.3.240
+    host ='10.9.3.240'
     port = 9000
     server = yield from loop.create_server(app.make_handler(),host,port)
     logging.info('server start at http://%s:%s' % (host,port))
@@ -284,6 +286,7 @@ def init(loop):
 loop = asyncio.get_event_loop()
 loop.run_until_complete(init(loop))
 loop.run_forever() # server 才会执行listen
+
 
 
 
