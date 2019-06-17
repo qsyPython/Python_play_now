@@ -34,7 +34,7 @@ if (!S2) { S2 = {}; } else { require = S2; }
  * Available via the MIT or new BSD license.
  * see: http://github.com/jrburke/almond for details
  */
-//Going sloppy to avoid 'use strict' string cost, but strict practices should
+//Going sloppy to avoid 'use strict' string cost, but strict study_practices should
 //be followed.
 /*jslint sloppy: true */
 /*global setTimeout: false */
